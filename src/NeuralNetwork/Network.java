@@ -40,9 +40,9 @@ public class Network {
 	public Network(float learningRate)
 	{
 		this.learningRate = learningRate;
-		layers[2] = new Layer(10, 20, true);
-		layers[1] = new Layer(20, 784, true);
-		layers[0] = new Layer(784, 1, false);
+		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
+		layers[1] = new Layer(numberHiddenNodes, 784, true);
+		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
 	
 	public void learn(Float[] input, Float[] desiredOutput){
