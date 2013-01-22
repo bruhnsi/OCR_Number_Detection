@@ -37,7 +37,7 @@ public class Node {
 		{
 			sum += nodesBefore[i].getValue() * weights[i];
 		}
-		this.value = sum;
+		this.value = (float) ( 1 / (1+ Math.pow(Math.E,sum)));
 	}
 	
 	

@@ -5,7 +5,6 @@ import Data.ImageData;
 
 
 public class Main {
-	//test von mir
 	/**
 	 * @param args
 	 */
