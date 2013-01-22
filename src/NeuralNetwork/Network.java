@@ -9,9 +9,9 @@ public class Network {
 	
 	// getter and setter section
 	
-	public Layer[] getHiddenLayer() 
+	public Layer getHiddenLayer() 
 	{
-		return layers;
+		return this.layers[1];
 	}
 	
 	public void setHiddenLayer(Layer[] hiddenLayer) 
@@ -25,6 +25,11 @@ public class Network {
 		
 	}
 	
+	public Layer getInputLayer() 
+	{
+		return this.layers[0];
+	}
+	
 	public void setInputLayer(Layer inputLayer)
 	{
 		this.layers[0] = inputLayer;
@@ -34,6 +39,10 @@ public class Network {
 	public Network(float learningRate)
 	{
 		this.learningRate = learningRate;
+	}
+	
+	public void learn(Float[] input, Float[] desiredOutput){
+		Float[] deltak = new Float[numberOutputNodes];
 	}
 	
 	public void passforward()
