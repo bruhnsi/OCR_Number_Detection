@@ -36,7 +36,7 @@ public class Network {
 		this.learningRate = learningRate;
 	}
 	
-	public void passforeward()
+	public void passforward()
 	{
 		for(int i = 1; i < layers.length; i++)
 			layers[i].calcNodeValues(layers[i-1]);
