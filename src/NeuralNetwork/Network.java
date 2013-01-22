@@ -26,6 +26,9 @@ public class Network {
 		this.layers[0] = inputLayer;
 	}
 	
+	public void iShouldNotExist(){
+		
+	}
 	
 	public void passforeward()
 	{
