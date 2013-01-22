@@ -5,7 +5,8 @@ public class Network {
 	private Layer[] layers = new Layer[3];
 	private float learningRate;
 	private int numberOutputNodes = 10;
-	private int numberInputNodes = 784; 
+	private int numberInputNodes = 784;
+	private int numberHiddenNodes = numberOutputNodes*2; 
 	
 	// getter and setter section
 	
@@ -45,7 +46,43 @@ public class Network {
 	}
 	
 	public void learn(Float[] input, Float[] desiredOutput){
-		Float[] deltak = new Float[numberOutputNodes];
+		for (Integer i=0; i< numberInputNodes; i++)
+			getInputLayer().getNodes()[i].setValue(input[i]); 
+		passforward();
+		
+		//Compute Deltas (OutputLayer)
+		Float temp = 0.0f;
+		Float[] deltaK = new Float[numberOutputNodes];
+		Float[] deltaJ = new Float[numberOutputNodes*2];
+		for (Integer k=0; k< numberOutputNodes; k++){
+			temp = getOuputLayer().getNodes()[k].getValue();
+			deltaK[k] = (desiredOutput[k] - temp) * temp * (1- temp);
+			for (Integer j=0; j< numberHiddenNodes; j++){
+				deltaJ[j] += getHiddenLayer().getNodes()[j].getWeights()[k]* deltaK[k];
+			}
+		}
+		//Compute Deltas (HiddenLayer)
+		for (Integer j=0; j< numberHiddenNodes; j++){
+			deltaJ[j] *= getHiddenLayer().getNodes()[j].getValue() * (1 - getHiddenLayer().getNodes()[j].getValue());
+		}
+
+		Node tempNode = null;
+		//Update Weights connected to OutputLayer
+		for (Integer j=0; j< numberHiddenNodes; j++){
+				for (Integer k=0; k< numberOutputNodes; k++){
+				tempNode = getHiddenLayer().getNodes()[j];
+				tempNode.setWeight(k, tempNode.getWeight(k) - learningRate * deltaK[k] * tempNode.getValue());
+				}
+			}
+		//Update Weights connected to HiddenLayer
+		for (Integer i=0; i< numberInputNodes; i++){
+				for (Integer j=0; j< numberHiddenNodes; j++){
+				tempNode = getInputLayer().getNodes()[i];
+				tempNode.setWeight(j, tempNode.getWeight(j) - learningRate * deltaJ[j] * tempNode.getValue());
+				}
+			}
+	
+	
 	}
 	
 	public void passforward()

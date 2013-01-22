@@ -27,6 +27,12 @@ public class Node {
 	public void setWeights(float[] weights) {
 		this.weights = weights;
 	}
+	public float getWeight(Integer i) {
+		return this.weights[i];
+	}
+	public void setWeight(Integer i, float weights) {
+		this.weights[i] = weights;
+	}
 	
 
 	
