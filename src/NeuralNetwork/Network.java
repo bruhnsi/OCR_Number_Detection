@@ -1,7 +1,7 @@
 package NeuralNetwork;
 
 public class Network {
-
+	//test
 	private Layer[] layers = new Layer[3];
 	private float learningRate;
 	private int numberOutputNodes = 10;
