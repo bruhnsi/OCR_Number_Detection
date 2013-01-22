@@ -8,6 +8,7 @@ public class Layer {
 	
 
 	private Node[] nodes;
+	// First weights[X] = Array of weights for Node nodes[1]
 	private float[][] weights;
 	
 
@@ -36,15 +37,16 @@ public class Layer {
 	}
 	
 	// Constructor
-	Layer(int numberOfNodes)
+	Layer(int numberOfNodes,int numberOfNodesLayerBefore)
 	{
-		this.initLayer(numberOfNodes);
+		this.initLayer(numberOfNodes,numberOfNodesLayerBefore);
 	}
 	
 	// Object methods section
 	
-	public void initRandomWeights(float min, float max)
+	private void initRandomWeights(float min, float max, int numberOfNodesBeforeLayer)
 	{
+		weights = new float[nodes.length][numberOfNodesBeforeLayer];
 		Random randomGenerator = new Random();
 		for(float[] weightsArray :weights)
 		{
@@ -56,19 +58,22 @@ public class Layer {
 	}
 	
 	// init function
-	public void initLayer(int numberOfNodes)
+	private void initLayer(int numberOfNodes,int numberOfNodesBeforeLayer)
 	{
+		nodes = new Node[numberOfNodes];
 		for( int i = 0; i < numberOfNodes; i++)
 		{
-			initRandomWeights(-1, 1);
+			initRandomWeights(-1, 1,numberOfNodesBeforeLayer);
 			nodes[i] = new Node();
 			nodes[i].setWeights(weights[i]);
 		}
 	}
 	
-	public void calcNodeValues()
+	public void calcNodeValues(Layer layerBefore)
 	{
-		
+		for(int i = 0; i < nodes.length; i++)
+			nodes[i].calcValue(layerBefore);
+			
 	}
 	
 	// function for updating all weights on this Layer

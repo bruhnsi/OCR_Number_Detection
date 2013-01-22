@@ -29,6 +29,16 @@ public class Node {
 		this.weights = weights;
 	}
 	
+	public void calcValue(Layer layerBefore)
+	{
+		Node[] nodesBefore = layerBefore.getNodes();
+		float sum = 0;
+		for(int i = 0; i < nodesBefore.length ;i++)
+		{
+			sum += nodesBefore[i].getValue() * weights[i];
+		}
+		this.value = sum;
+	}
 	
 	
 	

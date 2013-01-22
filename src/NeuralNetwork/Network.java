@@ -1,45 +1,41 @@
 package NeuralNetwork;
-import java.util.List;
+
 
 
 
 public class Network {
 	
-	private Layer inputLayer;
-	private Layer outputLayer;
-	private List<Layer> hiddenLayer;
+
+	private Layer[] layers;
 	
 	// getter and setter section
-	public Layer getInputLayer() 
+	
+	public Layer[] getHiddenLayer() 
 	{
-		return inputLayer;
+		return layers;
 	}
 	
-	public void setInputLayer(Layer inputLayer) 
+	public void setHiddenLayer(Layer[] hiddenLayer) 
 	{
-		this.inputLayer = inputLayer;
+		this.layers = hiddenLayer;
 	}
 	
-	public Layer getOutputLayer() 
+	public Layer getOuputLayer()
 	{
-		return outputLayer;
+		return this.layers[layers.length -1];
 	}
 	
-	public void setOutputLayer(Layer outputLayer) 
+	public void setInputLayer(Layer inputLayer)
 	{
-		this.outputLayer = outputLayer;
+		this.layers[0] = inputLayer;
 	}
 	
-	public List<Layer> getHiddenLayer() 
-	{
-		return hiddenLayer;
-	}
 	
-	public void setHiddenLayer(List<Layer> hiddenLayer) 
+	public void passforeward()
 	{
-		this.hiddenLayer = hiddenLayer;
+		for(int i = 1; i < layers.length; i++)
+			layers[i].calcNodeValues(layers[i-1]);
 	}
-	
 	
 	
 	
