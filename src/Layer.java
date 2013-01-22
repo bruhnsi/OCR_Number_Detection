@@ -46,7 +46,7 @@ public class Layer {
 		Random randomGenerator = new Random();
 		for(float[] weightsArray :weights)
 		{
-			for(float weight :weightsArray)
+			for(@SuppressWarnings("unused") float weight :weightsArray)
 			{
 				weight = randomGenerator.nextFloat()*(max-min) + min;
 			}
