@@ -44,7 +44,4 @@ public class Node {
 		this.value = (float) ( 1 / (1+ Math.pow(Math.E,-sum)));
 	}
 	
-	
-	
-
 }
