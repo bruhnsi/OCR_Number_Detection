@@ -1,9 +1,5 @@
 package NeuralNetwork;
 
-import java.util.Random;
-
-
-
 public class Node {
 	
 	// object properties
@@ -44,7 +40,4 @@ public class Node {
 		this.value = (float) ( 1 / (1+ Math.pow(Math.E,-sum)));
 	}
 	
-	
-	
-
 }

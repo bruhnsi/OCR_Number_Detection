@@ -9,7 +9,6 @@ public class Layer {
 
 	private Node[] nodes;
 	
-
 	// Getter and Setter section  
 	public Node[] getNodes()
 	{
@@ -76,6 +75,7 @@ public class Layer {
 	// function for updating all weights on this Layer
 	public void updateWeights()
 	{
+		
 	}
 	
 	

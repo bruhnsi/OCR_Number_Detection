@@ -2,7 +2,10 @@ package NeuralNetwork;
 
 public class Network {
 
-	private Layer[] layers;
+	private Layer[] layers = new Layer[3];
+	private float learningRate;
+	private int numberOutputNodes = 10;
+	private int numberInputNodes = 784; 
 	
 	// getter and setter section
 	
@@ -19,6 +22,7 @@ public class Network {
 	public Layer getOuputLayer()
 	{
 		return this.layers[layers.length -1];
+		
 	}
 	
 	public void setInputLayer(Layer inputLayer)
@@ -26,6 +30,10 @@ public class Network {
 		this.layers[0] = inputLayer;
 	}
 	
+	public Network(float learningRate)
+	{
+		this.learningRate = learningRate;
+	}
 	
 	public void passforeward()
 	{
