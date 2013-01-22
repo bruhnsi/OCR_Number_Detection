@@ -8,8 +8,6 @@ public class Layer {
 	
 
 	private Node[] nodes;
-	// First weights[X] = Array of weights for Node nodes[1]
-	private float[][] weights;
 	
 
 	// Getter and Setter section  
@@ -28,45 +26,44 @@ public class Layer {
 			return false;
 	}
 	
-	public float[][] getWeights() {
-		return weights;
-	}
-
-	public void setWeights(float[][] weights) {
-		this.weights = weights;
-	}
+	
 	
 	// Constructor
-	Layer(int numberOfNodes,int numberOfNodesLayerBefore)
+	Layer(int numberOfNodes,int numberOfNodesLayerBefore, boolean random)
 	{
-		this.initLayer(numberOfNodes,numberOfNodesLayerBefore);
-	}
-	
-	// Object methods section
-	
-	private void initRandomWeights(float min, float max, int numberOfNodesBeforeLayer)
-	{
-		weights = new float[nodes.length][numberOfNodesBeforeLayer];
-		Random randomGenerator = new Random();
-		for(float[] weightsArray :weights)
-		{
-			for(@SuppressWarnings("unused") float weight :weightsArray)
-			{
-				weight = randomGenerator.nextFloat()*(max-min) + min;
-			}
-		}
+		this.initLayer(numberOfNodes,numberOfNodesLayerBefore,random);
 	}
 	
 	// init function
-	private void initLayer(int numberOfNodes,int numberOfNodesBeforeLayer)
+	private void initLayer(int numberOfNodes,int numberOfNodesBeforeLayer,boolean random)
 	{
 		nodes = new Node[numberOfNodes];
 		for( int i = 0; i < numberOfNodes; i++)
 		{
-			initRandomWeights(-1, 1,numberOfNodesBeforeLayer);
 			nodes[i] = new Node();
-			nodes[i].setWeights(weights[i]);
+			if(random)
+				nodes[i].setWeights(getRandomWeights(nodes[i], -0.1f , 0.1f , numberOfNodesBeforeLayer));
+			else
+			{
+				float[] weights = new float[numberOfNodesBeforeLayer];
+				for (int j = 0; j < weights.length; j++) 
+				{
+					weights[j] = 1;
+				}
+				nodes[i].setWeights(weights);
+			}
 		}
+	}
+	
+	private float[] getRandomWeights(Node node,float min, float max, int numberOfNodesBeforeLayer)
+	{
+		float[] weights = new float[numberOfNodesBeforeLayer];
+		Random randomGenerator = new Random();
+		for(int i =  0; i < weights.length; i++)
+		{
+			weights[i] = randomGenerator.nextFloat()*(max-min) + min;
+		}
+		return weights;
 	}
 	
 	public void calcNodeValues(Layer layerBefore)

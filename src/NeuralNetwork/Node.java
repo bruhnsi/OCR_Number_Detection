@@ -1,5 +1,7 @@
 package NeuralNetwork;
 
+import java.util.Random;
+
 
 
 public class Node {
@@ -29,6 +31,8 @@ public class Node {
 		this.weights = weights;
 	}
 	
+
+	
 	public void calcValue(Layer layerBefore)
 	{
 		Node[] nodesBefore = layerBefore.getNodes();
@@ -37,7 +41,7 @@ public class Node {
 		{
 			sum += nodesBefore[i].getValue() * weights[i];
 		}
-		this.value = (float) ( 1 / (1+ Math.pow(Math.E,sum)));
+		this.value = (float) ( 1 / (1+ Math.pow(Math.E,-sum)));
 	}
 	
 	

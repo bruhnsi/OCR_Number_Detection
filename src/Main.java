@@ -25,5 +25,5 @@ public class Main {
                 array[i - 1] = array[randIx];
                 array[randIx] = temp;
         }
-}
+    }
 }

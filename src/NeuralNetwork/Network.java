@@ -1,10 +1,6 @@
 package NeuralNetwork;
 
-
-
-
 public class Network {
-	
 
 	private Layer[] layers;
 	
@@ -35,8 +31,5 @@ public class Network {
 	{
 		for(int i = 1; i < layers.length; i++)
 			layers[i].calcNodeValues(layers[i-1]);
-	}
-	
-	
-	
+	}	
 }
