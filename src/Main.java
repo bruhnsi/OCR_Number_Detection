@@ -1,4 +1,7 @@
-import ch.systemsx.cisd.hdf5.*;
+import Data.DataProvider;
+import Data.ImageData;
+
+
 
 
 public class Main {
@@ -6,13 +9,12 @@ public class Main {
 	/**
 	 * @param args
 	 */
-	class Data{
-		public int data[][];
-		public float[] label;
-	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		  
+		DataProvider dataProvider = new DataProvider("./bin/test.h5");
+		ImageData[] data = dataProvider.readData();
+		System.out.print(data[0]);
 	}
 
 }

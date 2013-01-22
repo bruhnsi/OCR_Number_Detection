@@ -11,19 +11,24 @@ public class ImageData {
 	public int[] getGrayValues() {
 		return grayValues;
 	}
-	public void setGrayValues(int[] grayValues) {
-		this.grayValues = grayValues;
-	}
 	public int getLabel() {
 		return label;
 	}
-	public void setLabel(int label) {
-		this.label = label;
-	}
+	
 	
 	public ImageData(int[] grayValues,int label ) {
 		this.label = label;
 		this.grayValues = grayValues;
+	}
+	
+	@Override 
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.label+ "\n\n");
+		for(int grayValue :this.grayValues)
+			sb.append(grayValue+ " ");
+		return sb.toString();
 	}
 	
 	
