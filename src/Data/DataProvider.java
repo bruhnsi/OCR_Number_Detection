@@ -54,7 +54,12 @@ public class DataProvider
 					 {
 						 int greyValues[] = new int[data.length];
 						 for(int j=0; j < data.length ;j++)
-							 greyValues[j] = data[j][i];
+						 {
+							 if(data[j][i] > 40)
+								 greyValues[j] = 1;
+							 else
+								 greyValues[j] = 0;
+						 }
 						 imageDataArray[i] = new ImageData(greyValues, (int) labels[i]);
 					 }
 					 shuffle(imageDataArray);
