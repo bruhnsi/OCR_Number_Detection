@@ -81,7 +81,7 @@ public class Network {
 		for (int k=0; k< numberOutputNodes; k++){
 			tempNode = getOutputLayer().getNodes()[k];
 				for (int j=0; j< numberHiddenNodes; j++){
-				tempNode.setWeight(j, tempNode.getWeight(j) - learningRate * deltaK[k] * tempNode.getValue());
+				tempNode.setWeight(k, tempNode.getWeight(k) - learningRate * deltaK[k] * getHiddenLayer().getNodes()[j].getValue());
 				deltaJ[k] += tempNode.getWeight(j)* deltaK[k]; //Compute DeltaJ (HiddenLayer) Part1 (Efficiency) 
 			}
 		}
@@ -94,7 +94,7 @@ public class Network {
 		for (int j=0; j< numberHiddenNodes; j++){
 				for (int i=0; i< numberInputNodes; i++){
 				tempNode = getHiddenLayer().getNodes()[j];
-				tempNode.setWeight(i, tempNode.getWeight(i) - learningRate * deltaJ[j] * tempNode.getValue());
+				tempNode.setWeight(i, tempNode.getWeight(i) - learningRate * deltaJ[j] * getInputLayer().getNodes()[i].getValue());
 				}
 			}
 		desiredOutput[expectedValue]=0.0f;
