@@ -20,15 +20,19 @@ public class Main {
 		float error = 1; 
 		int countLearningData = learningData.length;
 		int countTestData = testData.length;
-		while(error > 0.2)
+		while(error > 0.3)
 		{
 			for(ImageData img :learningData)
 			{
 				net.learn(img.getGrayValues(), img.getLabel());
 			}
+			int sumTrue = 0;
 			for(ImageData img :testData)
 			{
-				net
+				net.setInput(img);
+				net.passforward();
+				if (net.getOutput() == (int) img.getLabel())
+					sumTrue++;
 			}
 		}
 	}

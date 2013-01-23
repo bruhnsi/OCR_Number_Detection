@@ -1,6 +1,5 @@
 package NeuralNetwork;
 
-import java.util.GregorianCalendar;
 
 import Data.ImageData;
 
@@ -38,6 +37,18 @@ public class Network {
 	public void setInputLayer(Layer inputLayer)
 	{
 		this.layers[0] = inputLayer;
+	}
+	
+	public int getOutput()
+	{
+		int max = 0;
+		Node[] outputNodes = getOuputLayer().getNodes();
+		for(int i = 1; i < outputNodes.length;i++ )
+		{
+			if (outputNodes[i].getValue() > outputNodes[max].getValue())
+				max = i;
+		}
+		return max;
 	}
 	
 
@@ -101,6 +112,7 @@ public class Network {
 	{
 		for(int i = 1; i < layers.length; i++)
 			layers[i].calcNodeValues(layers[i-1]);
+		
 	}	
 	
 	
