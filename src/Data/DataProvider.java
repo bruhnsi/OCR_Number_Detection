@@ -24,7 +24,7 @@ public class DataProvider
 	public ImageData[] getTestData()
 	{
 		int dataLenght = data.length;
-		int count = (int) (dataLenght / 10);
+		int count = (int) (0.5 * dataLenght / 10);
 		ImageData[] testData = new ImageData[count];
 		for (int i = 1; i<= count; i++)
 			testData[i-1] = data[dataLenght-i];
@@ -34,7 +34,7 @@ public class DataProvider
 	public ImageData[] getLerntData()
 	{
 		int dataLenght = data.length;
-		int count = (int) (9* dataLenght / 10);
+		int count = (int) (9.5* dataLenght / 10);
 		ImageData[] learnData = new ImageData[count];
 		for (int i = 0; i < count; i++)
 			learnData[i] = data[i];

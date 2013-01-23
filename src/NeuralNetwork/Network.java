@@ -4,10 +4,10 @@ import Data.ImageData;
 public class Network {
 	//test tes
 	private Layer[] layers = new Layer[3];
-	private float learningRate;
+	private float learningRate = 0.02f;
 	private int numberOutputNodes = 10;
 	private int numberInputNodes = 784;
-	private int numberHiddenNodes = numberOutputNodes*4;
+	private int numberHiddenNodes = numberOutputNodes*2;
 	private float[] desiredOutput= new float[numberOutputNodes];
 	
 	// getter and setter section
@@ -50,10 +50,22 @@ public class Network {
 		return max;
 	}
 	
-
+	public Network()
+	{
+		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
+		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
+		layers[0] = new Layer(numberInputNodes, 1, false);
+	}
+	
 	public Network(float learningRate)
 	{
 		this.learningRate = learningRate;
+	}
+
+	public Network(float learningRate, int numberHiddenLayerNodes)
+	{
+		this(learningRate);
+		this.numberHiddenNodes = numberHiddenLayerNodes;
 		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
 		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
 		layers[0] = new Layer(numberInputNodes, 1, false);
