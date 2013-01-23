@@ -60,38 +60,40 @@ public class Network {
 		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
 	
-	public void learn(float[] input, Float[] desiredOutput){
-		for (Integer i=0; i< numberInputNodes; i++)
+	public void learn(float[] input, float[] desiredOutput){
+		for (int i=0; i< numberInputNodes; i++)
 			getInputLayer().getNodes()[i].setValue(input[i]); 
 		passforward();
 		
 		//Compute Deltas (OutputLayer)
-		Float temp = 0.0f;
-		Float[] deltaK = new Float[numberOutputNodes];
-		Float[] deltaJ = new Float[numberOutputNodes*2];
-		for (Integer k=0; k< numberOutputNodes; k++){
+		float temp = 0.0f;
+		float[] deltaK = new float[numberOutputNodes];
+		float[] deltaJ = new float[numberOutputNodes*2];
+		for (int k=0; k< numberOutputNodes; k++){
 			temp = getOuputLayer().getNodes()[k].getValue();
 			deltaK[k] = (desiredOutput[k] - temp) * temp * (1- temp);
-			for (Integer j=0; j< numberHiddenNodes; j++){
-				deltaJ[j] += getHiddenLayer().getNodes()[j].getWeights()[k]* deltaK[k];
+			for (int j=0; j< numberHiddenNodes; j++){
+				deltaJ[j] += getHiddenLayer().getNodes()[j].getWeight(k)* deltaK[k];
 			}
-		}
-		//Compute Deltas (HiddenLayer)
-		for (Integer j=0; j< numberHiddenNodes; j++){
-			deltaJ[j] *= getHiddenLayer().getNodes()[j].getValue() * (1 - getHiddenLayer().getNodes()[j].getValue());
 		}
 
 		Node tempNode = null;
 		//Update Weights connected to OutputLayer
-		for (Integer j=0; j< numberHiddenNodes; j++){
-				for (Integer k=0; k< numberOutputNodes; k++){
+		for (int j=0; j< numberHiddenNodes; j++){
+				for (int k=0; k< numberOutputNodes; k++){
 				tempNode = getHiddenLayer().getNodes()[j];
 				tempNode.setWeight(k, tempNode.getWeight(k) - learningRate * deltaK[k] * tempNode.getValue());
-				}
+				deltaJ[j] += tempNode.getWeight(k)* deltaK[k]; //Compute DeltaJ (HiddenLayer) Part1 (Efficiency) 
 			}
+		}
+		
+		//Compute DeltaJ (HiddenLayer) Part 2
+		for (int j=0; j< numberHiddenNodes; j++){
+			deltaJ[j] *= getHiddenLayer().getNodes()[j].getValue() * (1 - getHiddenLayer().getNodes()[j].getValue());
+		}
 		//Update Weights connected to HiddenLayer
-		for (Integer i=0; i< numberInputNodes; i++){
-				for (Integer j=0; j< numberHiddenNodes; j++){
+		for (int i=0; i< numberInputNodes; i++){
+				for (int j=0; j< numberHiddenNodes; j++){
 				tempNode = getInputLayer().getNodes()[i];
 				tempNode.setWeight(j, tempNode.getWeight(j) - learningRate * deltaJ[j] * tempNode.getValue());
 				}
