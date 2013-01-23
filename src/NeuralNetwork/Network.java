@@ -73,7 +73,7 @@ public class Network {
 		float[] deltaJ = new float[numberOutputNodes*2];
 		for (int k=0; k< numberOutputNodes; k++){
 			temp = getOutputLayer().getNodes()[k].getValue();
-			deltaK[k] = (desiredOutput[k] - temp) * temp * (1- temp);
+			deltaK[k] = (temp - desiredOutput[k]) * temp * (1- temp);
 		}
 
 		Node tempNode = null;
