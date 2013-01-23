@@ -2,9 +2,6 @@ import Data.DataProvider;
 import Data.ImageData;
 import NeuralNetwork.Network;
 
-
-
-
 public class Main {
 	/**
 	 * @param args
@@ -15,9 +12,14 @@ public class Main {
 		DataProvider dataProvider = new DataProvider("./bin/test.h5");
 		ImageData[] learningData = dataProvider.getLerntData();
 		ImageData[] testData = dataProvider.getTestData();
-		Network net = new Network(0.002f);
+		
+		Network net = new Network(0.01f);
 		float error = 1; 
-		while(error > 0.2)
+		//TODO: determine best learningrate
+		//TODO: use Crossvalidation
+		//TODO: compare normalisation and no normalisation
+		//TODO: dynamic learnrate
+		while(error > 0.01)
 		{
 			for(ImageData img :learningData)
 			{
@@ -32,8 +34,6 @@ public class Main {
 				{
 					sumTrue++;
 				}
-
-					
 			}
 			error = 1 - ((float)sumTrue / (float)testData.length);
 			System.out.println(error);

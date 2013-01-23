@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="NeuralNetwork/Network.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="/home/ich/Documents/UNI/GWV/Aufgabenlösungen/project/cisd-jhdf5/lib/nativejar/hdf5-linux-intel.jar"/>
 	<classpathentry kind="lib" path="/home/ich/Documents/UNI/GWV/Aufgabenlösungen/project/cisd-jhdf5/lib/cisd-args4j.jar"/>
@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/home/ich/Documents/UNI/GWV/Aufgabenlösungen/project/cisd-jhdf5/lib/cisd-jhdf5-tools.jar"/>
 	<classpathentry kind="lib" path="/home/ich/Documents/UNI/GWV/Aufgabenlösungen/project/cisd-jhdf5/lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="/home/ich/Documents/UNI/GWV/Aufgabenlösungen/project/cisd-jhdf5/lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="src/NeuralNetwork/Network.java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
