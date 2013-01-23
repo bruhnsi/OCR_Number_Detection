@@ -9,7 +9,8 @@ public class Network {
 	private float learningRate;
 	private int numberOutputNodes = 10;
 	private int numberInputNodes = 784;
-	private int numberHiddenNodes = numberOutputNodes*2; 
+	private int numberHiddenNodes = numberOutputNodes*2;
+	private float[] desiredOutput= new float[numberOutputNodes];
 	
 	// getter and setter section
 	
@@ -60,7 +61,8 @@ public class Network {
 		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
 	
-	public void learn(float[] input, float[] desiredOutput){
+	public void learn(float[] input, int expectedValue){
+		desiredOutput[expectedValue]=1.0f;
 		for (int i=0; i< numberInputNodes; i++)
 			getInputLayer().getNodes()[i].setValue(input[i]); 
 		passforward();
@@ -72,9 +74,6 @@ public class Network {
 		for (int k=0; k< numberOutputNodes; k++){
 			temp = getOuputLayer().getNodes()[k].getValue();
 			deltaK[k] = (desiredOutput[k] - temp) * temp * (1- temp);
-			for (int j=0; j< numberHiddenNodes; j++){
-				deltaJ[j] += getHiddenLayer().getNodes()[j].getWeight(k)* deltaK[k];
-			}
 		}
 
 		Node tempNode = null;
@@ -98,8 +97,7 @@ public class Network {
 				tempNode.setWeight(j, tempNode.getWeight(j) - learningRate * deltaJ[j] * tempNode.getValue());
 				}
 			}
-	
-	
+		desiredOutput[expectedValue]=0.0f;
 	}
 	
 	public void setInput(ImageData inputData)
