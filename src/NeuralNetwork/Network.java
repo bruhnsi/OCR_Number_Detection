@@ -1,6 +1,4 @@
 package NeuralNetwork;
-
-
 import Data.ImageData;
 
 public class Network {
