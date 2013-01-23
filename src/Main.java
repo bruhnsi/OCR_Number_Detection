@@ -16,17 +16,19 @@ public class Main {
 		ImageData[] learningData = dataProvider.getLerntData();
 		ImageData[] testData = dataProvider.getTestData();
 		
-		Network net = new Network(0.2f);
+		Network net = new Network(0.01f);
 		float error = 1; 
-		int countLearningData = learningData.length;
-		int countTestData = testData.length;
-		while(error > 0.3)
+		//TODO: determine best learningrate
+		//TODO: use Crossvalidation
+		//TODO: compare normalisation and no normalisation
+		//TODO: dynamic learnrate
+		while(error > 0.01)
 		{
 			for(ImageData img :learningData)
 			{
 				net.learn(img.getGrayValues(), img.getLabel());
 			}
-			int sumTrue = 0;
+			float sumTrue = 0;
 			for(ImageData img :testData)
 			{
 				net.setInput(img);
