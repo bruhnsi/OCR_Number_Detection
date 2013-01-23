@@ -9,7 +9,7 @@ public class Network {
 	private float learningRate;
 	private int numberOutputNodes = 10;
 	private int numberInputNodes = 784;
-	private int numberHiddenNodes = numberOutputNodes*2;
+	private int numberHiddenNodes = numberOutputNodes*4;
 	private float[] desiredOutput= new float[numberOutputNodes];
 	
 	// getter and setter section
@@ -57,7 +57,7 @@ public class Network {
 	{
 		this.learningRate = learningRate;
 		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
-		layers[1] = new Layer(numberHiddenNodes, 784, true);
+		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
 		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
 	
@@ -70,7 +70,7 @@ public class Network {
 		//Compute Deltas (OutputLayer)
 		float temp = 0.0f;
 		float[] deltaK = new float[numberOutputNodes];
-		float[] deltaJ = new float[numberOutputNodes*2];
+		float[] deltaJ = new float[numberHiddenNodes];
 		for (int k=0; k< numberOutputNodes; k++){
 			temp = getOutputLayer().getNodes()[k].getValue();
 			deltaK[k] = (temp - desiredOutput[k]) * temp * (1- temp);
