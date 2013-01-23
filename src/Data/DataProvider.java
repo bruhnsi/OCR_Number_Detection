@@ -44,7 +44,7 @@ public class DataProvider
 	private ImageData[] readData(){
 			try{
 				IHDF5Reader reader = HDF5Factory.openForReading(path);
-				 int[][] data = reader.readIntMatrix("data/data");
+				 float[][] data = reader.readFloatMatrix("data/data");
 				 float[] labels = reader.readFloatArray("data/label");
 				 reader.close();
 				 ImageData[] imageDataArray = new ImageData[labels.length];
@@ -52,7 +52,7 @@ public class DataProvider
 				 {
 					 for(int i = 0; i < labels.length; i++)
 					 {
-						 int greyValues[] = new int[data.length];
+						 float greyValues[] = new float[data.length];
 						 for(int j=0; j < data.length ;j++)
 						 {
 							 if(data[j][i] > 40)

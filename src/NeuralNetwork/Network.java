@@ -1,13 +1,16 @@
 package NeuralNetwork;
 
+import java.util.GregorianCalendar;
+
+import Data.ImageData;
+
 public class Network {
 	//test tes
 	private Layer[] layers = new Layer[3];
 	private float learningRate;
 	private int numberOutputNodes = 10;
 	private int numberInputNodes = 784;
-	private int numberHiddenNodes = numberOutputNodes*2;
-	private float[] desiredOutput = new float[numberOutputNodes];  
+	private int numberHiddenNodes = numberOutputNodes*2; 
 	
 	// getter and setter section
 	
@@ -46,9 +49,8 @@ public class Network {
 		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
 	
-	public void learn(Float[] input, int expectedValue){
-		desiredOutput[expectedValue]=1.0f;
-		for (int i=0; i< numberInputNodes; i++)
+	public void learn(float[] input, Float[] desiredOutput){
+		for (Integer i=0; i< numberInputNodes; i++)
 			getInputLayer().getNodes()[i].setValue(input[i]); 
 		passforward();
 		
@@ -56,22 +58,22 @@ public class Network {
 		Float temp = 0.0f;
 		Float[] deltaK = new Float[numberOutputNodes];
 		Float[] deltaJ = new Float[numberOutputNodes*2];
-		for (int k=0; k< numberOutputNodes; k++){
+		for (Integer k=0; k< numberOutputNodes; k++){
 			temp = getOuputLayer().getNodes()[k].getValue();
 			deltaK[k] = (desiredOutput[k] - temp) * temp * (1- temp);
-			for (int j=0; j< numberHiddenNodes; j++){
+			for (Integer j=0; j< numberHiddenNodes; j++){
 				deltaJ[j] += getHiddenLayer().getNodes()[j].getWeights()[k]* deltaK[k];
 			}
 		}
 		//Compute Deltas (HiddenLayer)
-		for (int j=0; j< numberHiddenNodes; j++){
+		for (Integer j=0; j< numberHiddenNodes; j++){
 			deltaJ[j] *= getHiddenLayer().getNodes()[j].getValue() * (1 - getHiddenLayer().getNodes()[j].getValue());
 		}
 
 		Node tempNode = null;
 		//Update Weights connected to OutputLayer
-		for (int j=0; j< numberHiddenNodes; j++){
-				for (int k=0; k< numberOutputNodes; k++){
+		for (Integer j=0; j< numberHiddenNodes; j++){
+				for (Integer k=0; k< numberOutputNodes; k++){
 				tempNode = getHiddenLayer().getNodes()[j];
 				tempNode.setWeight(k, tempNode.getWeight(k) - learningRate * deltaK[k] * tempNode.getValue());
 				}
@@ -83,8 +85,16 @@ public class Network {
 				tempNode.setWeight(j, tempNode.getWeight(j) - learningRate * deltaJ[j] * tempNode.getValue());
 				}
 			}
-		
-		desiredOutput[expectedValue]=0.0f;
+	
+	
+	}
+	
+	public void setInput(ImageData inputData)
+	{
+		float[] greyValues = inputData.getGrayValues();
+		Node[] inputNodes = this.layers[0].getNodes();
+		for(int i = 0; i < greyValues.length; i++ )
+			inputNodes[i].setValue(greyValues[i]);
 	}
 	
 	public void passforward()
