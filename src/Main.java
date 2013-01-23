@@ -34,7 +34,10 @@ public class Main {
 				if (net.getOutput() == (int) img.getLabel())
 					sumTrue++;
 			}
+			error = 1 - (sumTrue / testData.length);
+			System.out.println(error);
 		}
+		
 	}
 	
 	
