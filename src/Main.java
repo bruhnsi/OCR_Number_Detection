@@ -33,7 +33,7 @@ public class Main {
 			// create 6 Networks with different learning data
 			for(int i = 0;i < 6; i++)
 			{
-				learningNets[i] = new Network(Float.parseFloat(args[1]),Integer.parseInt(args[2]),dataProvider.getLerntData(i+1));
+				learningNets[i] = new Network(Float.parseFloat(args[1]),Integer.parseInt(args[2]),dataProvider.getLerntData(6)[i]);
 			}
 			System.out.println("  learning rate: " + args[1]);
 			System.out.println("  number hidden nodes: " + args[2]);
@@ -42,7 +42,7 @@ public class Main {
 		{
 			for(int i = 0;i < 6; i++)
 			{
-				learningNets[i] = new Network(0.02f,20,dataProvider.getLerntData(i+1));
+				learningNets[i] = new Network(0.02f,20,dataProvider.getLerntData(6)[i]);
 			}
 		}
 		
@@ -63,6 +63,9 @@ public class Main {
 			}
 			for(Thread t :threads)
 				t.join();
+			
+			// switch learning data
+			
 			
 			
 			// middel all nets

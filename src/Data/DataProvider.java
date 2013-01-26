@@ -21,23 +21,17 @@ public class DataProvider
 		this.data = readData();
 	}
 	
-	public ImageData[] getTestData()
+
+	public ImageData[][] getData(int numberOfParts)
 	{
 		int dataLenght = data.length;
-		int count = (int) (dataLenght / 7);
-		ImageData[] testData = new ImageData[count];
-		for (int i = 1; i<= count; i++)
-			testData[i-1] = data[dataLenght-i];
-		return testData;
-	}
-	
-	public ImageData[] getLerntData(int partNummber)
-	{
-		int dataLenght = data.length;
-		int count = (int) (1 * dataLenght / 7);
-		ImageData[] learnData = new ImageData[count];
-		for (int i = (partNummber -1)* dataLenght/7; i < (partNummber -1)* dataLenght/7 + count; i++)
-			learnData[i - (partNummber -1)* dataLenght/7] = data[i];
+		int count = (int) dataLenght / numberOfParts ;
+		ImageData[][] learnData = new ImageData[numberOfParts][count];
+		for(int i = 0; i <  numberOfParts; i++)
+		{
+			for(int j = 0; j < count; j++)
+			learnData[i][j] = data[i*count+j];
+		}
 		return learnData;
 	}
 	
