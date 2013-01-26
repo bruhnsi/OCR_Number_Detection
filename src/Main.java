@@ -14,6 +14,7 @@ public class Main {
 		
 		// init Data
 		DataProvider dataProvider;
+		int numberNetworks = 6;
 		
 		if(args.length >= 1)
 		{
@@ -22,18 +23,18 @@ public class Main {
 		}
 		else
 			dataProvider = new DataProvider("./bin/test.h5");
-		ImageData[] testData = dataProvider.getTestData();
+		ImageData[][] testData = dataProvider.getData(numberNetworks);
 		
 		
 		
 		// init Networks
-		Network learningNets[] = new Network[6];
+		Network learningNets[] = new Network[numberNetworks];
 		if (args.length >= 3)
 		{
 			// create 6 Networks with different learning data
 			for(int i = 0;i < 6; i++)
 			{
-				learningNets[i] = new Network(Float.parseFloat(args[1]),Integer.parseInt(args[2]),dataProvider.getLerntData(6)[i]);
+				learningNets[i] = new Network(Float.parseFloat(args[1]),Integer.parseInt(args[2]),dataProvider.getData(6)[i]);
 			}
 			System.out.println("  learning rate: " + args[1]);
 			System.out.println("  number hidden nodes: " + args[2]);
@@ -42,7 +43,7 @@ public class Main {
 		{
 			for(int i = 0;i < 6; i++)
 			{
-				learningNets[i] = new Network(0.02f,20,dataProvider.getLerntData(6)[i]);
+				learningNets[i] = new Network(0.02f,20,dataProvider.getData(6)[i]);
 			}
 		}
 		

@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
 	<classpathentry kind="lib" path="lib/cisd-jhdf5-batteries_included_lin_win_mac.jar"/>
+	<classpathentry kind="lib" path="lib/db4o-8.0.249.16098-all-java5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
