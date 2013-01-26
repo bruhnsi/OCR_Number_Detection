@@ -27,6 +27,14 @@ public class Network implements Runnable {
 		return error;
 	}
 	
+	public ImageData[] getLearningData() {
+		return learningData;
+	}
+
+	public void setLearningData(ImageData[] learningData) {
+		this.learningData = learningData;
+	}
+
 	public Layer getHiddenLayer() 
 	{
 		return this.layers[1];

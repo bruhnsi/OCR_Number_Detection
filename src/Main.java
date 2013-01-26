@@ -48,6 +48,7 @@ public class Main {
 		
 		
 		float error = 1; 
+		//TODO: rotating lerningDatasets 
 		//TODO: determine best learningrate
 		//TODO: compare normalisation and no normalisation
 		//TODO: dynamic learnrate
