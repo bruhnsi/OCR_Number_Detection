@@ -44,7 +44,12 @@ public class DataProvider
 	
 	private ImageData[] readData(){
 		File file = new File(path);
+		if (!file.exists()){
+			System.out.println("File Not Found: " + file.getAbsolutePath());
+			return null;
+		}
 		String filename = file.getName();
+		
 		System.out.println("Loading ImageDate: " + filename);
 		if(filename.matches(".*.h5")){
 			System.out.println("Importing ImageData (H5 Format)");
@@ -106,7 +111,7 @@ public class DataProvider
 				//Label can be stored as the first character in the filename, i.e "6_00.jpg" => 6
 				int label = 0;
 				try {
-					label=Integer.parseInt("6_00".substring(0, 1));
+					label=Integer.parseInt(filename.substring(0, 1));
 				}
 				catch (Exception e) {
 					System.out.println("No Label for " + file + " has been found! Defaulting to 0.");
@@ -121,7 +126,7 @@ public class DataProvider
 			}
 		}
 		else {
-			System.out.println("Can't import Imagedate : Unknown Format");
+			System.out.println("Can't import ImageData : Unknown Format");
 		}
 		return null;
 	}
