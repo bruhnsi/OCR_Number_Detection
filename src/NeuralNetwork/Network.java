@@ -1,7 +1,7 @@
 package NeuralNetwork;
 import Data.ImageData;
 
-public class Network {
+public class Network implements Runnable {
 	//test tes
 	private Layer[] layers = new Layer[3];
 	private float learningRate = 0.02f;
@@ -9,6 +9,8 @@ public class Network {
 	private int numberInputNodes = 784;
 	private int numberHiddenNodes = numberOutputNodes*2;
 	private float[] desiredOutput= new float[numberOutputNodes];
+	private ImageData[] learningData;
+	private float error;
 	
 	// getter and setter section
 	
@@ -50,21 +52,11 @@ public class Network {
 		return max;
 	}
 	
-	public Network()
-	{
-		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
-		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
-		layers[0] = new Layer(numberInputNodes, 1, false);
-	}
-	
-	public Network(float learningRate)
-	{
-		this.learningRate = learningRate;
-	}
 
-	public Network(float learningRate, int numberHiddenLayerNodes)
+
+	public Network(float learningRate, int numberHiddenLayerNodes,ImageData[] learningData)
 	{
-		this(learningRate);
+		this.learningData = learningData;
 		this.numberHiddenNodes = numberHiddenLayerNodes;
 		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
 		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
@@ -123,6 +115,19 @@ public class Network {
 		for(int i = 1; i < layers.length; i++)
 			layers[i].calcNodeValues(layers[i-1]);
 		
+	}
+
+	@Override
+	public void run() 
+	{
+		int sumLearn = 0;
+		for(ImageData img :learningData)
+		{
+			this.learn(img.getGrayValues(), img.getLabel());
+			if((int) img.getLabel() == this.getOutput())
+				sumLearn++;
+		}
+		this.error = (1.0f - ((float)sumLearn / (float)learningData.length));
 	}	
 	
 	
