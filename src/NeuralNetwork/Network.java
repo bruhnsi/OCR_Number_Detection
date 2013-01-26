@@ -1,7 +1,12 @@
 package NeuralNetwork;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 import Data.ImageData;
 
-public class Network implements Runnable {
+public class Network implements Runnable, Savable {
 
 	private float[] desiredOutput= new float[10];
 	private float error;
@@ -22,6 +27,17 @@ public class Network implements Runnable {
 		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
 		layers[0] = new Layer(numberInputNodes, 1, false);
 	}
+	public Network(float learningRate, int numberHiddenLayerNodes)
+	{
+		this.numberHiddenNodes = numberHiddenLayerNodes;
+		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
+		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
+		layers[0] = new Layer(numberInputNodes, 1, false);
+	}
+	public Network(String path){
+		loadFromFile(path);
+	}
+
 
 	public float getError() {
 		return error;
@@ -147,8 +163,75 @@ public class Network implements Runnable {
 
 	public void setNumberHiddenNodes(int numberHiddenNodes) {
 		this.numberHiddenNodes = numberHiddenNodes;
+	}
+	
+	public void saveToFile(String path){
+        try {
+            FileOutputStream fileStream = new FileOutputStream(path);
+            DataOutputStream dataStream = new DataOutputStream(fileStream);
+            
+            save(dataStream);
+            
+            fileStream.close();
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
+
+	}
+	
+	public void loadFromFile(String path){
+        try {
+            FileInputStream fileStream = new FileInputStream(path);
+            DataInputStream dataStream = new DataInputStream(fileStream);
+            
+            load(dataStream);
+            
+            fileStream.close();
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
+
+	}
+	
+	public void save(DataOutputStream dS){
+        try {            
+            dS.writeFloat(learningRate);
+            dS.writeInt(numberInputNodes);
+            dS.writeInt(numberHiddenNodes);
+            dS.writeInt(numberOutputNodes);
+            
+            getInputLayer().save(dS);
+            getHiddenLayer().save(dS);
+            getOutputLayer().save(dS);
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
+		
+	}
+	@Override
+	public void load(DataInputStream dS) {
+        try {            
+        	learningRate = dS.readFloat();
+        	numberInputNodes = dS.readInt();
+        	numberHiddenNodes = dS.readInt();
+        	numberOutputNodes = dS.readInt();
+            
+            layers[0] = new Layer(numberInputNodes, 1, false);
+            layers[0].load(dS);
+    		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
+            layers[1].load(dS);
+    		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
+            layers[2].load(dS);
+
+    		
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
+		
 	}	
-	
-	
 	
 }

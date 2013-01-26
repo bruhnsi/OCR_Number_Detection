@@ -1,10 +1,12 @@
 package NeuralNetwork;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.Random;
 
 
 
-public class Layer {
+public class Layer implements Savable {
 	
 
 	private Node[] nodes;
@@ -90,6 +92,21 @@ public class Layer {
 	// function for updating all weights on this Layer
 	public void updateWeights()
 	{
+	}
+
+	@Override
+	public void save(DataOutputStream dS) {
+		for (int i = 0; i < nodes.length; i++) {
+			nodes[i].save(dS);
+		}		
+	}
+
+	@Override
+	public void load(DataInputStream dS) {
+		for (int i = 0; i < nodes.length; i++) {
+			nodes[i].load(dS);
+		}		
+		
 	}
 	
 	

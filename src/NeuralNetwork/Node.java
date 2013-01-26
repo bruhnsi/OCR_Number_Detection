@@ -1,7 +1,10 @@
 package NeuralNetwork;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
-public class Node {
+
+public class Node implements Savable{
 	
 	// object properties
 	private Layer layer;
@@ -45,6 +48,29 @@ public class Node {
 			sum += nodesBefore[i].getValue() * weights[i];
 		}
 		this.value = (float) ( 1 / (1+ Math.pow(Math.E,-sum)));
+	}
+	@Override
+	public void save(DataOutputStream dS) {
+		try {
+			for (int i = 0; i < weights.length; i++) {
+				dS.writeFloat(weights[i]);
+			}
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
+		
+	}
+	@Override
+	public void load(DataInputStream dS) {
+		try {
+			for (int i = 0; i < weights.length; i++) {
+				weights[i] = dS.readFloat();
+			}
+        }
+        catch (Exception e){
+        	e.printStackTrace();
+        }
 	}
 	
 }
