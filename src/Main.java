@@ -83,7 +83,6 @@ public class Main {
 			}
 		    error = (1.0f - ((float)sumTrue/ (float)testData.length));
 		    System.out.println("Error: "+error);
-			
 		}
 	}
 		

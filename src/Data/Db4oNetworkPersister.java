@@ -5,7 +5,6 @@ import NeuralNetwork.Network;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
-import com.db4o.config.EmbeddedConfiguration;
 
 public class Db4oNetworkPersister {
 	
@@ -23,7 +22,7 @@ public class Db4oNetworkPersister {
 	
 	public Network[] loadNetworks()
 	{
-		ObjectSet result = db.queryByExample(Network.class);
+		ObjectSet<Network> result = db.queryByExample(Network.class);
 		return (Network[]) result.toArray();
 	}
 	
