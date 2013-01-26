@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/cisd-jhdf5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/cisd-jhdf5-batteries_included_lin_win_mac.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
