@@ -29,6 +29,7 @@ public class Network implements Runnable, Savable {
 	}
 	public Network(float learningRate, int numberHiddenLayerNodes)
 	{
+		this.learningRate = learningRate;
 		this.numberHiddenNodes = numberHiddenLayerNodes;
 		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
 		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);

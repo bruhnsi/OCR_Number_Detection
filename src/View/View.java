@@ -24,7 +24,7 @@ import javax.swing.JCheckBox;
 public class View {
 
 	private JFrame frame;
-	private Network[] nets;
+	private Network net;
 	private final JSeparator separator_1 = new JSeparator();
 	private JTextField txtLearningRate;
 	private JTextField textField;
@@ -64,6 +64,7 @@ public class View {
 		frame.getContentPane().setLayout(springLayout);
 		
 		JButton btnTrain = new JButton("learning");
+		btnTrain.setEnabled(false);
 		springLayout.putConstraint(SpringLayout.WEST, btnTrain, 10, SpringLayout.WEST, frame.getContentPane());
 		btnTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,23 +86,20 @@ public class View {
 		frame.getContentPane().add(separator);
 		frame.getContentPane().add(separator_1);
 		
-		JSeparator separator_2 = new JSeparator();
-		springLayout.putConstraint(SpringLayout.WEST, separator_2, 0, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, separator_2, 565, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(separator_2);
-		
 		JSeparator separator_3 = new JSeparator();
+		springLayout.putConstraint(SpringLayout.SOUTH, btnTrain, -17, SpringLayout.NORTH, separator_3);
 		springLayout.putConstraint(SpringLayout.SOUTH, separator_3, -100, SpringLayout.SOUTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, separator_3, 0, SpringLayout.EAST, separator);
 		frame.getContentPane().add(separator_3);
 		
 		JLabel lblLearningSection = new JLabel("Learning Section");
+		springLayout.putConstraint(SpringLayout.NORTH, lblLearningSection, 10, SpringLayout.NORTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, lblLearningSection, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, separator_3, 0, SpringLayout.WEST, lblLearningSection);
-		springLayout.putConstraint(SpringLayout.NORTH, lblLearningSection, 8, SpringLayout.SOUTH, separator_2);
-		springLayout.putConstraint(SpringLayout.WEST, lblLearningSection, 10, SpringLayout.WEST, separator_2);
 		frame.getContentPane().add(lblLearningSection);
 		
 		txtLearningRate = new JTextField();
+		txtLearningRate.setEditable(false);
 		frame.getContentPane().add(txtLearningRate);
 		txtLearningRate.setColumns(10);
 		
@@ -117,21 +115,16 @@ public class View {
 		frame.getContentPane().add(lblNumberOfHidden);
 		
 		textField = new JTextField();
+		textField.setEditable(false);
 		springLayout.putConstraint(SpringLayout.NORTH, textField, 12, SpringLayout.SOUTH, txtLearningRate);
 		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, 0, SpringLayout.EAST, textField);
 		springLayout.putConstraint(SpringLayout.WEST, textField, 6, SpringLayout.EAST, lblNumberOfHidden);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
-		JCheckBox chckbxNormalisation = new JCheckBox("normalisation");
-		springLayout.putConstraint(SpringLayout.NORTH, btnTrain, 17, SpringLayout.SOUTH, chckbxNormalisation);
-		springLayout.putConstraint(SpringLayout.WEST, chckbxNormalisation, 0, SpringLayout.WEST, lblLearningRate);
-		springLayout.putConstraint(SpringLayout.SOUTH, chckbxNormalisation, -28, SpringLayout.NORTH, separator_1);
-		frame.getContentPane().add(chckbxNormalisation);
-		
 		JCheckBox chckbxCrossValidation = new JCheckBox("cross validation");
-		springLayout.putConstraint(SpringLayout.NORTH, chckbxCrossValidation, 22, SpringLayout.SOUTH, lblNumberOfHidden);
-		springLayout.putConstraint(SpringLayout.WEST, chckbxCrossValidation, 37, SpringLayout.EAST, chckbxNormalisation);
+		springLayout.putConstraint(SpringLayout.WEST, chckbxCrossValidation, 0, SpringLayout.WEST, btnTrain);
+		springLayout.putConstraint(SpringLayout.SOUTH, chckbxCrossValidation, -14, SpringLayout.NORTH, btnTrain);
 		frame.getContentPane().add(chckbxCrossValidation);
 		
 		JLabel lblTestSection = new JLabel("Test Section");
@@ -151,6 +144,15 @@ public class View {
 		
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
+		
+		JMenuItem mntmNewNetwork = new JMenuItem("New Network");
+		mntmNewNetwork.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NewNetworkView addView = new NewNetworkView(net);
+				addView.setVisible(true);
+			}
+		});
+		mnDatei.add(mntmNewNetwork);
 		
 		JMenuItem mntmLoadNetwork = new JMenuItem("Load Network");
 		mnDatei.add(mntmLoadNetwork);
