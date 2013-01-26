@@ -26,6 +26,20 @@ public class Layer {
 			return false;
 	}
 	
+	public float[][] getWeights()
+	{
+		float[][] weights = new float[nodes.length][];
+		for(int i = 0; i < nodes.length; i++)
+			weights[i] = nodes[i].getWeights();
+		return weights;
+	}
+	
+	public void setWeights(float[][] weights)
+	{
+		for(int i = 0; i < nodes.length; i++)
+			nodes[i].setWeights(weights[i]);
+	}
+	
 	
 	
 	// Constructor

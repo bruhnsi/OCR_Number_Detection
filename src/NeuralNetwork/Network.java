@@ -2,32 +2,34 @@ package NeuralNetwork;
 import Data.ImageData;
 
 public class Network implements Runnable {
-	//test tes
-	private Layer[] layers = new Layer[3];
-	private float learningRate = 0.02f;
-	private int numberOutputNodes = 10;
-	private int numberInputNodes = 784;
-	private int numberHiddenNodes = numberOutputNodes*2;
-	private float[] desiredOutput= new float[numberOutputNodes];
-	private ImageData[] learningData;
+
+	private float[] desiredOutput= new float[10];
 	private float error;
+	private Layer[] layers = new Layer[3];
+	private ImageData[] learningData;
+	private float learningRate = 0.02f;
+	private int numberHiddenNodes = 20;
+	private int numberInputNodes = 784;
+    private int numberOutputNodes = 10;
 	
-	// getter and setter section
+	
+
+	public Network(float learningRate, int numberHiddenLayerNodes,ImageData[] learningData)
+	{
+		this.learningData = learningData;
+		this.numberHiddenNodes = numberHiddenLayerNodes;
+		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
+		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
+		layers[0] = new Layer(numberInputNodes, 1, false);
+	}
+
+	public float getError() {
+		return error;
+	}
 	
 	public Layer getHiddenLayer() 
 	{
 		return this.layers[1];
-	}
-	
-	public void setHiddenLayer(Layer[] hiddenLayer) 
-	{
-		this.layers = hiddenLayer;
-	}
-	
-	public Layer getOutputLayer()
-	{
-		return this.layers[layers.length -1];
-		
 	}
 	
 	public Layer getInputLayer() 
@@ -35,9 +37,9 @@ public class Network implements Runnable {
 		return this.layers[0];
 	}
 	
-	public void setInputLayer(Layer inputLayer)
-	{
-		this.layers[0] = inputLayer;
+	// getter and setter section
+	public int getNumberHiddenNodes() {
+		return numberHiddenNodes;
 	}
 	
 	public int getOutput()
@@ -52,15 +54,10 @@ public class Network implements Runnable {
 		return max;
 	}
 	
-
-
-	public Network(float learningRate, int numberHiddenLayerNodes,ImageData[] learningData)
+	public Layer getOutputLayer()
 	{
-		this.learningData = learningData;
-		this.numberHiddenNodes = numberHiddenLayerNodes;
-		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
-		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
-		layers[0] = new Layer(numberInputNodes, 1, false);
+		return this.layers[layers.length -1];
+		
 	}
 	
 	public void learn(float[] input, int expectedValue){
@@ -102,14 +99,6 @@ public class Network implements Runnable {
 		desiredOutput[expectedValue]=0.0f;
 	}
 	
-	public void setInput(ImageData inputData)
-	{
-		float[] greyValues = inputData.getGrayValues();
-		Node[] inputNodes = this.layers[0].getNodes();
-		for(int i = 0; i < greyValues.length; i++ )
-			inputNodes[i].setValue(greyValues[i]);
-	}
-	
 	public void passforward()
 	{
 		for(int i = 1; i < layers.length; i++)
@@ -128,6 +117,28 @@ public class Network implements Runnable {
 				sumLearn++;
 		}
 		this.error = (1.0f - ((float)sumLearn / (float)learningData.length));
+	}
+	
+	public void setHiddenLayer(Layer[] hiddenLayer) 
+	{
+		this.layers = hiddenLayer;
+	}
+	
+	public void setInput(ImageData inputData)
+	{
+		float[] greyValues = inputData.getGrayValues();
+		Node[] inputNodes = this.layers[0].getNodes();
+		for(int i = 0; i < greyValues.length; i++ )
+			inputNodes[i].setValue(greyValues[i]);
+	}
+	
+	public void setInputLayer(Layer inputLayer)
+	{
+		this.layers[0] = inputLayer;
+	}
+
+	public void setNumberHiddenNodes(int numberHiddenNodes) {
+		this.numberHiddenNodes = numberHiddenNodes;
 	}	
 	
 	

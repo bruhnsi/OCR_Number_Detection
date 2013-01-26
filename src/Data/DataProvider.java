@@ -36,7 +36,7 @@ public class DataProvider
 		int dataLenght = data.length;
 		int count = (int) (1 * dataLenght / 7);
 		ImageData[] learnData = new ImageData[count];
-		for (int i = (partNummber -1)* dataLenght/7; i < count; i++)
+		for (int i = (partNummber -1)* dataLenght/7; i < (partNummber -1)* dataLenght/7 + count; i++)
 			learnData[i - (partNummber -1)* dataLenght/7] = data[i];
 		return learnData;
 	}

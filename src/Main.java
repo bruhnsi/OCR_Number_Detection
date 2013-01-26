@@ -51,7 +51,6 @@ public class Main {
 		//TODO: determine best learningrate
 		//TODO: compare normalisation and no normalisation
 		//TODO: dynamic learnrate
-		int loopCount = 0;
 		while(error > 0.01)
 		{
 			// creating Threads
@@ -63,6 +62,8 @@ public class Main {
 			}
 			for(Thread t :threads)
 				t.join();
+			
+			
 			// middel all nets
 			Network net = middelNets(learningNets);
 			
@@ -76,20 +77,58 @@ public class Main {
 					sumTrue++;
 			}
 		    error = (1.0f - ((float)sumTrue/ (float)testData.length));
+		    System.out.println("Error: "+error);
 			
 		}
+	}
 		
-		public static Network middelNets(Network[] nets)
+	public static Network middelNets(Network[] nets)
+	{
+		int netCount = nets.length;
+		Network newNet =  new Network(0.02f, nets[0].getNumberHiddenNodes(), null);
+		float[][][] outputWeights = new float[nets.length][][];
+		float[][][] hiddenWeights = new float[nets.length][][];
+		for(int i = 0; i < netCount; i++)
 		{
-			float[] outputWeights = new float[nets.length];
-			for(int i = 0; i < nets.length; i++)
+			outputWeights[i] = nets[i].getOutputLayer().getWeights();
+			hiddenWeights[i] = nets[i].getHiddenLayer().getWeights();
+		}
+			
+		float[][] newOutputWeights = new float[10][newNet.getNumberHiddenNodes()];
+		float[][] newhiddenWeights = new float[newNet.getNumberHiddenNodes()][784];
+			
+		// calc new weights for Output Layer
+		for(int i = 0; i < 10; i++)
+		{
+			for(int j = 0; j < newNet.getNumberHiddenNodes();j++)
 			{
-				outputWeights[i] = nets[i].getOutputLayer().ge
+				float sum = 0;
+				for(int netnumber = 0; netnumber < nets.length; netnumber++)
+				{
+					sum += outputWeights[netnumber][i][j];
+				}
+				newOutputWeights[i][j] = sum/(float)netCount;
 			}
 		}
 		
+		// calc new weights for hidden Layer
+		for(int i = 0; i < newNet.getNumberHiddenNodes(); i++)
+		{
+			for(int j = 0; j < 784;j++)
+			{
+				float sum = 0;
+				for(int netnumber = 0; netnumber < nets.length; netnumber++)
+				{
+					sum += hiddenWeights[netnumber][i][j];
+				}
+				newhiddenWeights[i][j] = sum/(float)netCount;
+			}
+		}
+		
+		// set Weights and return new Network
+		newNet.getHiddenLayer().setWeights(newhiddenWeights);
+		newNet.getOutputLayer().setWeights(newOutputWeights);
+		return newNet;
 	}
-	
-	
-
+		
 }
