@@ -2,6 +2,7 @@ package View;
 
 import java.awt.EventQueue;
 import java.awt.LayoutManager;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
@@ -40,6 +41,7 @@ public class View {
 	private JLabel lblOutput;
 	private JLabel lblLabel;
 	private JSpinner spinner;
+	private Network nets[];
 
 	/**
 	 * Launch the application.
@@ -101,14 +103,45 @@ public class View {
 							DataProvider dataProvider = new DataProvider(path);
 							ImageData[][] data = dataProvider.getData(7);
 							int loopCount = (int)spinner.getValue();
+							float error = 0;
 							for(int count = 1; count <= loopCount; count++)
 							{
 								int sumTrue = 0;
-								System.out.println((int) spinner.getValue());
+								
+								
 								if(chckbxCrossValidation.isSelected())
 								{
-									//Crossvalidation
-									//for()
+									// Cossvalidation
+									nets = new Network[7];
+									for(int i = 0; i < nets.length; i++)
+									{
+										nets[i] = new Network(net.getLearningRate(), net.getNumberHiddenNodes(),data,i);
+									}
+									// Start threads
+									Thread threads[] = new Thread[nets.length]; 
+									for(int i = 0; i < nets.length; i++)
+									{
+										threads[i] = new Thread(nets[i]);
+										threads[i].start();
+									}
+									// Join Threads
+									for(int i = 0; i < threads.length; i++)
+									{
+										try {
+											threads[i].join();
+										} catch (InterruptedException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+									// calc Error
+									float sumE = 0f;
+									for(Network n :nets)
+									{
+										sumE += n.getError();
+									}
+									error = sumE / (float)nets.length;
+									net = Network.middelNets(nets);
 								}
 								else
 								{
@@ -131,12 +164,14 @@ public class View {
 										if (net.getOutput() == data[6][i].getLabel())
 											sumTrue++;
 									}
+									error = 1.0f - (float)sumTrue / (float)data[6].length;
 								}
 								// calc Error
-								float error = 1.0f - (float)sumTrue / (float)data[6].length;
+							    
 								spinner.setValue(loopCount - count);
 								// show Error
 								lblErrorTrain.setText("Error: " + error);
+								System.out.println("Iteration 1:" + count+ "     Error rate : " +error);
 							//	progressBar.setValue(0);
 							}
 							

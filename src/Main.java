@@ -52,7 +52,6 @@ public class Main {
 		//TODO: rotating lerningDatasets 
 		//TODO: determine best learningrate
 		//TODO: compare normalisation and no normalisation
-		//TODO: dynamic learnrate
 		while(error > 0.01)
 		{
 			// creating Threads

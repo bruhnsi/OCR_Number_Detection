@@ -11,17 +11,20 @@ public class Network implements Runnable, Savable {
 	private float[] desiredOutput= new float[10];
 	private float error;
 	private Layer[] layers = new Layer[3];
-	private ImageData[] learningData;
+	private ImageData[][] learningData;
 	private float learningRate = 0.02f;
 	private int numberHiddenNodes = 20;
 	private int numberInputNodes = 784;
     private int numberOutputNodes = 10;
+    private int id;
 	
 	
 
-	public Network(float learningRate, int numberHiddenLayerNodes,ImageData[] learningData)
+	public Network(float learningRate, int numberHiddenLayerNodes,ImageData[][] learningData,int id)
 	{
+		this.learningRate = learningRate;
 		this.learningData = learningData;
+		this.id = id;
 		this.numberHiddenNodes = numberHiddenLayerNodes;
 		layers[2] = new Layer(numberOutputNodes, numberHiddenNodes, true);
 		layers[1] = new Layer(numberHiddenNodes, numberInputNodes, true);
@@ -50,11 +53,11 @@ public class Network implements Runnable, Savable {
 		return error;
 	}
 	
-	public ImageData[] getLearningData() {
+	public ImageData[][] getLearningData() {
 		return learningData;
 	}
 
-	public void setLearningData(ImageData[] learningData) {
+	public void setLearningData(ImageData[][] learningData) {
 		this.learningData = learningData;
 	}
 
@@ -92,6 +95,8 @@ public class Network implements Runnable, Savable {
 	}
 	
 	public void learn(float[] input, int expectedValue){
+		for (int i= 0; i < desiredOutput.length; i++)
+			desiredOutput[i] = 0f;
 		desiredOutput[expectedValue]=1.0f;
 		for (int i=0; i< numberInputNodes; i++)
 			getInputLayer().getNodes()[i].setValue(input[i]); 
@@ -127,7 +132,7 @@ public class Network implements Runnable, Savable {
 				tempNode.setWeight(i, tempNode.getWeight(i) - learningRate * deltaJ[j] * getInputLayer().getNodes()[i].getValue());
 				}
 			}
-		desiredOutput[expectedValue]=0.0f;
+		desiredOutput[expectedValue]= 0f;
 	}
 	
 	public void passforward()
@@ -140,14 +145,27 @@ public class Network implements Runnable, Savable {
 	@Override
 	public void run() 
 	{
-		int sumLearn = 0;
-		for(ImageData img :learningData)
+		int sumTrue = 0;
+		// learn
+		for (int i = 0; i < learningData.length; i++)
 		{
-			this.learn(img.getGrayValues(), img.getLabel());
-			if((int) img.getLabel() == this.getOutput())
-				sumLearn++;
+			if(i != this.id)
+			{
+				for(ImageData img :learningData[i])
+				{
+					this.learn(img.getGrayValues(), img.getLabel());
+				}
+			}
+		}		
+		//test
+		for(ImageData img :learningData[id])
+		{
+			this.setInput(img);
+			this.passforward();
+			if (this.getOutput() == img.getLabel())
+				sumTrue++;
 		}
-		this.error = (1.0f - ((float)sumLearn / (float)learningData.length));
+		this.error = 1.0f - ((float)sumTrue / (float)(learningData[id].length));
 	}
 	
 	public void setHiddenLayer(Layer[] hiddenLayer) 
@@ -244,7 +262,7 @@ public class Network implements Runnable, Savable {
 	public static Network middelNets(Network[] nets)
 	{
 		int netCount = nets.length;
-		Network newNet =  new Network(0.02f, nets[0].getNumberHiddenNodes(), null);
+		Network newNet =  new Network(0.02f, nets[0].getNumberHiddenNodes());
 		float[][][] outputWeights = new float[nets.length][][];
 		float[][][] hiddenWeights = new float[nets.length][][];
 		for(int i = 0; i < netCount; i++)
