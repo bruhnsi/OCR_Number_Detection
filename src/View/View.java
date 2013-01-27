@@ -14,6 +14,8 @@ import javax.swing.JMenu;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
+import Data.DataProvider;
+import Data.ImageData;
 import NeuralNetwork.Network;
 
 import java.awt.Button;
@@ -21,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class View {
 
@@ -31,6 +35,9 @@ public class View {
 	private JTextField textField;
 	private NewNetworkView addView;
 	private JButton btnTrain;
+	private JCheckBox chckbxCrossValidation;
+	private JLabel lblErrorTrain;
+	private JSpinner spinner;
 
 	/**
 	 * Launch the application.
@@ -72,6 +79,59 @@ public class View {
 		btnTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				btnTrain.setEnabled(false);
+				txtLearningRate.setEditable(false);
+				spinner.setEnabled(false);
+				chckbxCrossValidation.setEnabled(false);
+				
+				JFileChooser fc = new JFileChooser();
+				int state = fc.showOpenDialog(null);
+				if(state == JFileChooser.APPROVE_OPTION)
+				{
+					String path = fc.getSelectedFile().getAbsolutePath();
+					DataProvider dataProvider = new DataProvider(path);
+					ImageData[][] data = dataProvider.getData(7);
+					int loopCount = (int)spinner.getValue();
+					for(int count = 1; count <= loopCount; count++)
+					{
+						int sumTrue = 0;
+						System.out.println((int) spinner.getValue());
+						if(chckbxCrossValidation.isSelected())
+						{
+							//Crossvalidation
+							
+						}
+						else
+						{
+							// learning on first 6/7 of data
+							for(int i = 0; i < 6; i++)
+							{
+								for(int j = 0; j < data[i].length; j++)
+									net.learn(data[i][j].getGrayValues(), data[i][j].getLabel());
+							}
+							// testing on last 1/7 of data
+							
+							for(int i = 0; i < data[6].length; i++ )
+							{
+								net.setInput(data[6][i]);
+								net.passforward();
+								if (net.getOutput() == data[6][i].getLabel())
+									sumTrue++;
+							}
+						}
+						// calc Error
+						float error = 1.0f - (float)sumTrue / (float)data[6].length;
+						spinner.setValue(loopCount - count);
+						// show Error
+						lblErrorTrain.setText("Error: " + error);
+					}
+					
+				}
+				btnTrain.setEnabled(false);
+				txtLearningRate.setEditable(false);
+				spinner.setEnabled(false);
+				chckbxCrossValidation.setEnabled(false);
+				
 			}
 		});
 		frame.getContentPane().add(btnTrain);
@@ -102,6 +162,7 @@ public class View {
 		frame.getContentPane().add(lblLearningSection);
 		
 		txtLearningRate = new JTextField();
+		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, -51, SpringLayout.EAST, frame.getContentPane());
 		txtLearningRate.setEditable(false);
 		frame.getContentPane().add(txtLearningRate);
 		txtLearningRate.setColumns(10);
@@ -109,25 +170,23 @@ public class View {
 		JLabel lblLearningRate = new JLabel("learning rate:");
 		springLayout.putConstraint(SpringLayout.NORTH, txtLearningRate, -2, SpringLayout.NORTH, lblLearningRate);
 		springLayout.putConstraint(SpringLayout.WEST, lblLearningRate, 29, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, lblLearningRate, 18, SpringLayout.SOUTH, lblLearningSection);
 		frame.getContentPane().add(lblLearningRate);
 		
 		JLabel lblNumberOfHidden = new JLabel("number of hidden nodes:");
-		springLayout.putConstraint(SpringLayout.NORTH, lblNumberOfHidden, 89, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, lblLearningRate, -18, SpringLayout.NORTH, lblNumberOfHidden);
+		springLayout.putConstraint(SpringLayout.NORTH, lblNumberOfHidden, 20, SpringLayout.SOUTH, lblLearningRate);
 		springLayout.putConstraint(SpringLayout.WEST, lblNumberOfHidden, 0, SpringLayout.WEST, lblLearningRate);
 		frame.getContentPane().add(lblNumberOfHidden);
 		
 		textField = new JTextField();
+		springLayout.putConstraint(SpringLayout.NORTH, textField, -2, SpringLayout.NORTH, lblNumberOfHidden);
+		springLayout.putConstraint(SpringLayout.EAST, textField, 0, SpringLayout.EAST, txtLearningRate);
 		textField.setEditable(false);
-		springLayout.putConstraint(SpringLayout.NORTH, textField, 12, SpringLayout.SOUTH, txtLearningRate);
-		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, 0, SpringLayout.EAST, textField);
-		springLayout.putConstraint(SpringLayout.WEST, textField, 6, SpringLayout.EAST, lblNumberOfHidden);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
-		JCheckBox chckbxCrossValidation = new JCheckBox("cross validation");
-		springLayout.putConstraint(SpringLayout.WEST, chckbxCrossValidation, 0, SpringLayout.WEST, btnTrain);
-		springLayout.putConstraint(SpringLayout.SOUTH, chckbxCrossValidation, -14, SpringLayout.NORTH, btnTrain);
+		chckbxCrossValidation = new JCheckBox("cross validation");
+		springLayout.putConstraint(SpringLayout.WEST, chckbxCrossValidation, 0, SpringLayout.WEST, lblLearningRate);
 		frame.getContentPane().add(chckbxCrossValidation);
 		
 		JLabel lblTestSection = new JLabel("Test Section");
@@ -141,6 +200,24 @@ public class View {
 		springLayout.putConstraint(SpringLayout.NORTH, btnClassifyJpegImage, 0, SpringLayout.NORTH, btnTesting);
 		springLayout.putConstraint(SpringLayout.EAST, btnClassifyJpegImage, 0, SpringLayout.EAST, separator);
 		frame.getContentPane().add(btnClassifyJpegImage);
+		
+		lblErrorTrain = new JLabel("Error:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblErrorTrain, 5, SpringLayout.NORTH, btnTrain);
+		springLayout.putConstraint(SpringLayout.WEST, lblErrorTrain, 34, SpringLayout.EAST, separator_1);
+		frame.getContentPane().add(lblErrorTrain);
+		
+		spinner = new JSpinner();
+		springLayout.putConstraint(SpringLayout.NORTH, spinner, 11, SpringLayout.SOUTH, textField);
+		springLayout.putConstraint(SpringLayout.EAST, spinner, 0, SpringLayout.EAST, txtLearningRate);
+		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		frame.getContentPane().add(spinner);
+		
+		JLabel lblMaxNumberOf = new JLabel("max number of iteration:");
+		springLayout.putConstraint(SpringLayout.WEST, spinner, 54, SpringLayout.EAST, lblMaxNumberOf);
+		springLayout.putConstraint(SpringLayout.NORTH, chckbxCrossValidation, 8, SpringLayout.SOUTH, lblMaxNumberOf);
+		springLayout.putConstraint(SpringLayout.NORTH, lblMaxNumberOf, 16, SpringLayout.SOUTH, lblNumberOfHidden);
+		springLayout.putConstraint(SpringLayout.WEST, lblMaxNumberOf, 0, SpringLayout.WEST, lblLearningRate);
+		frame.getContentPane().add(lblMaxNumberOf);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
