@@ -28,6 +28,7 @@ public class View {
 	private final JSeparator separator_1 = new JSeparator();
 	private JTextField txtLearningRate;
 	private JTextField textField;
+	private NewNetworkView addView;
 
 	/**
 	 * Launch the application.
@@ -145,10 +146,20 @@ public class View {
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 		
+		this.addView = new NewNetworkView();
+		addView.addCreatListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				net = addView.getNet();
+				txtLearningRate.setText(Float.toString(net.getLearningRate()));
+				addView.setVisible(false);
+			}
+		});
+		
 		JMenuItem mntmNewNetwork = new JMenuItem("New Network");
 		mntmNewNetwork.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NewNetworkView addView = new NewNetworkView(net);
 				addView.setVisible(true);
 			}
 		});

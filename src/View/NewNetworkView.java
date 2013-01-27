@@ -21,13 +21,20 @@ public class NewNetworkView extends JFrame {
 	private JTextField textFieldLearningRate;
 	private JTextField textFieldNumberNode;
 	private Network net;
+	private JButton btnCreate;
 
 
+	public Network getNet() {
+		return net;
+	}
+
+	public void addCreatListener(ActionListener a){
+		btnCreate.addActionListener(a);
+	}
 	/**
 	 * Create the frame.
 	 */
-	public NewNetworkView(Network net) {
-		this.net = net;
+	public NewNetworkView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 354, 168);
 		contentPane = new JPanel();
@@ -60,12 +67,7 @@ public class NewNetworkView extends JFrame {
 		contentPane.add(textFieldNumberNode);
 		textFieldNumberNode.setColumns(10);
 		
-		JButton btnCreate = new JButton("Create");
-		btnCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				net = new Network(Float.parseFloat(textFieldLearningRate.getText()),Integer.parseInt(textFieldNumberNode.getText()));
-			}
-		});
+		this.btnCreate = new JButton("Create");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnCreate, 28, SpringLayout.SOUTH, textFieldNumberNode);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnCreate, 115, SpringLayout.WEST, contentPane);
 		contentPane.add(btnCreate);

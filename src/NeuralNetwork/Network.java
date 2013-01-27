@@ -39,6 +39,12 @@ public class Network implements Runnable, Savable {
 		loadFromFile(path);
 	}
 
+	public float getLearningRate() {
+		return learningRate;
+	}
+	public void setLearningRate(float learningRate) {
+		this.learningRate = learningRate;
+	}
 
 	public float getError() {
 		return error;
