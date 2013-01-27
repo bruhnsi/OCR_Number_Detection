@@ -29,6 +29,7 @@ public class View {
 	private JTextField txtLearningRate;
 	private JTextField textField;
 	private NewNetworkView addView;
+	private JButton btnTrain;
 
 	/**
 	 * Launch the application.
@@ -64,7 +65,7 @@ public class View {
 		springLayout.putConstraint(SpringLayout.WEST, separator_1, 120, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().setLayout(springLayout);
 		
-		JButton btnTrain = new JButton("learning");
+		this.btnTrain = new JButton("learning");
 		btnTrain.setEnabled(false);
 		springLayout.putConstraint(SpringLayout.WEST, btnTrain, 10, SpringLayout.WEST, frame.getContentPane());
 		btnTrain.addActionListener(new ActionListener() {
@@ -154,6 +155,8 @@ public class View {
 				net = new Network(Float.parseFloat(addView.getTextFieldLearningRate().getText()),Integer.parseInt(addView.getTextFieldNumberNode().getText()));
 				txtLearningRate.setText(Float.toString(net.getLearningRate()));
 				textField.setText(Integer.toString(net.getNumberHiddenNodes()));
+				txtLearningRate.setEditable(true);
+				btnTrain.setEnabled(true);
 				addView.setVisible(false);
 			}
 		});
