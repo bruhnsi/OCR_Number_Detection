@@ -3,8 +3,6 @@ package View;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -18,7 +16,6 @@ import Data.DataProvider;
 import Data.ImageData;
 import NeuralNetwork.Network;
 
-import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -37,6 +34,8 @@ public class View {
 	private JButton btnTrain;
 	private JCheckBox chckbxCrossValidation;
 	private JLabel lblErrorTrain;
+	private JLabel lblOutput;
+	private JLabel lblLabel;
 	private JSpinner spinner;
 
 	/**
@@ -142,6 +141,23 @@ public class View {
 		JButton btnTesting = new JButton("testing(against Data)");
 		btnTesting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int state = fc.showOpenDialog(null);
+				if(state == JFileChooser.APPROVE_OPTION)
+				{
+					String path = fc.getSelectedFile().getAbsolutePath();
+					DataProvider dataProvider = new DataProvider(path);
+					ImageData[][] data = dataProvider.getData(1);
+					int sumTrue=0;
+					for(int i = 0; i < data[0].length; i++ ){
+						net.setInput(data[0][i]);
+						net.passforward();
+						if (net.getOutput() == data[0][i].getLabel())
+							sumTrue++;
+					}
+					float error = 1.0f - (float)sumTrue / (float)data[0].length;// calc Error
+					lblErrorTrain.setText("Error: " + error);// show Error
+				}
 			}
 		});
 		springLayout.putConstraint(SpringLayout.WEST, btnTesting, 10, SpringLayout.WEST, frmOcr.getContentPane());
@@ -167,6 +183,16 @@ public class View {
 		springLayout.putConstraint(SpringLayout.WEST, lblLearningSection, 10, SpringLayout.WEST, frmOcr.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, separator_3, 0, SpringLayout.WEST, lblLearningSection);
 		frmOcr.getContentPane().add(lblLearningSection);
+		
+		lblOutput = new JLabel("Output:");
+		frmOcr.getContentPane().add(lblOutput);
+		
+		lblLabel = new JLabel("Label:");
+		springLayout.putConstraint(SpringLayout.SOUTH, lblLabel, -6, SpringLayout.SOUTH, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, lblLabel, -105, SpringLayout.EAST, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, lblOutput, -6, SpringLayout.NORTH, lblLabel);
+		springLayout.putConstraint(SpringLayout.EAST, lblOutput, 0, SpringLayout.EAST, lblLabel);
+		frmOcr.getContentPane().add(lblLabel);
 		
 		txtLearningRate = new JTextField();
 		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, -51, SpringLayout.EAST, frmOcr.getContentPane());
@@ -203,6 +229,24 @@ public class View {
 		frmOcr.getContentPane().add(lblTestSection);
 		
 		JButton btnClassifyJpegImage = new JButton("Classify Jpeg Image");
+		btnClassifyJpegImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int state = fc.showOpenDialog(null);
+				if(state == JFileChooser.APPROVE_OPTION)
+				{
+					String path = fc.getSelectedFile().getAbsolutePath();
+					DataProvider dataProvider = new DataProvider(path);
+					ImageData[][] data = dataProvider.getData(1);
+					
+					net.setInput(data[0][0]);
+					net.passforward();
+					lblOutput.setText("Output: " + net.getOutput());
+					lblLabel.setText("Label: " + data[0][0].getLabel());
+					//frmOcr.getGraphics().drawImage(data[0][0].getImage(), 0, 0, null);
+				}
+			}
+		});
 		springLayout.putConstraint(SpringLayout.EAST, btnTesting, -12, SpringLayout.WEST, btnClassifyJpegImage);
 		springLayout.putConstraint(SpringLayout.NORTH, btnClassifyJpegImage, 0, SpringLayout.NORTH, btnTesting);
 		springLayout.putConstraint(SpringLayout.EAST, btnClassifyJpegImage, 0, SpringLayout.EAST, separator);
