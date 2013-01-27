@@ -28,7 +28,7 @@ import javax.swing.SpinnerNumberModel;
 
 public class View {
 
-	private JFrame frame;
+	private JFrame frmOcr;
 	private Network net;
 	private final JSeparator separator_1 = new JSeparator();
 	private JTextField txtLearningRate;
@@ -47,7 +47,7 @@ public class View {
 			public void run() {
 				try {
 					View window = new View();
-					window.frame.setVisible(true);
+					window.frmOcr.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,16 +66,17 @@ public class View {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 400, 359);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmOcr = new JFrame();
+		frmOcr.setTitle("OCR");
+		frmOcr.setBounds(100, 100, 400, 359);
+		frmOcr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
-		springLayout.putConstraint(SpringLayout.WEST, separator_1, 120, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().setLayout(springLayout);
+		springLayout.putConstraint(SpringLayout.WEST, separator_1, 120, SpringLayout.WEST, frmOcr.getContentPane());
+		frmOcr.getContentPane().setLayout(springLayout);
 		
 		this.btnTrain = new JButton("learning");
 		btnTrain.setEnabled(false);
-		springLayout.putConstraint(SpringLayout.WEST, btnTrain, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, btnTrain, 10, SpringLayout.WEST, frmOcr.getContentPane());
 		btnTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -83,6 +84,8 @@ public class View {
 				txtLearningRate.setEditable(false);
 				spinner.setEnabled(false);
 				chckbxCrossValidation.setEnabled(false);
+				
+				net.setLearningRate(Float.parseFloat(txtLearningRate.getText()));
 				
 				JFileChooser fc = new JFileChooser();
 				int state = fc.showOpenDialog(null);
@@ -99,7 +102,7 @@ public class View {
 						if(chckbxCrossValidation.isSelected())
 						{
 							//Crossvalidation
-							
+							//for()
 						}
 						else
 						{
@@ -127,100 +130,104 @@ public class View {
 					}
 					
 				}
-				btnTrain.setEnabled(false);
-				txtLearningRate.setEditable(false);
-				spinner.setEnabled(false);
-				chckbxCrossValidation.setEnabled(false);
+				btnTrain.setEnabled(true);
+				txtLearningRate.setEditable(true);
+				spinner.setEnabled(true);
+				chckbxCrossValidation.setEnabled(true);
 				
 			}
 		});
-		frame.getContentPane().add(btnTrain);
+		frmOcr.getContentPane().add(btnTrain);
 		
 		JButton btnTesting = new JButton("testing(against Data)");
-		springLayout.putConstraint(SpringLayout.WEST, btnTesting, 10, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(btnTesting);
+		btnTesting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		springLayout.putConstraint(SpringLayout.WEST, btnTesting, 10, SpringLayout.WEST, frmOcr.getContentPane());
+		frmOcr.getContentPane().add(btnTesting);
 		
 		JSeparator separator = new JSeparator();
 		springLayout.putConstraint(SpringLayout.SOUTH, separator_1, 0, SpringLayout.SOUTH, separator);
-		springLayout.putConstraint(SpringLayout.NORTH, separator, 177, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, separator, -10, SpringLayout.EAST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, separator, 179, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, frame.getContentPane());
-		frame.getContentPane().add(separator);
-		frame.getContentPane().add(separator_1);
+		springLayout.putConstraint(SpringLayout.NORTH, separator, 177, SpringLayout.NORTH, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, separator, -10, SpringLayout.EAST, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, separator, 179, SpringLayout.NORTH, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, separator, -10, SpringLayout.EAST, frmOcr.getContentPane());
+		frmOcr.getContentPane().add(separator);
+		frmOcr.getContentPane().add(separator_1);
 		
 		JSeparator separator_3 = new JSeparator();
 		springLayout.putConstraint(SpringLayout.SOUTH, btnTrain, -17, SpringLayout.NORTH, separator_3);
-		springLayout.putConstraint(SpringLayout.SOUTH, separator_3, -100, SpringLayout.SOUTH, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, separator_3, -100, SpringLayout.SOUTH, frmOcr.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, separator_3, 0, SpringLayout.EAST, separator);
-		frame.getContentPane().add(separator_3);
+		frmOcr.getContentPane().add(separator_3);
 		
 		JLabel lblLearningSection = new JLabel("Learning Section");
-		springLayout.putConstraint(SpringLayout.NORTH, lblLearningSection, 10, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, lblLearningSection, 10, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, lblLearningSection, 10, SpringLayout.NORTH, frmOcr.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, lblLearningSection, 10, SpringLayout.WEST, frmOcr.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, separator_3, 0, SpringLayout.WEST, lblLearningSection);
-		frame.getContentPane().add(lblLearningSection);
+		frmOcr.getContentPane().add(lblLearningSection);
 		
 		txtLearningRate = new JTextField();
-		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, -51, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, txtLearningRate, -51, SpringLayout.EAST, frmOcr.getContentPane());
 		txtLearningRate.setEditable(false);
-		frame.getContentPane().add(txtLearningRate);
+		frmOcr.getContentPane().add(txtLearningRate);
 		txtLearningRate.setColumns(10);
 		
 		JLabel lblLearningRate = new JLabel("learning rate:");
 		springLayout.putConstraint(SpringLayout.NORTH, txtLearningRate, -2, SpringLayout.NORTH, lblLearningRate);
-		springLayout.putConstraint(SpringLayout.WEST, lblLearningRate, 29, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, lblLearningRate, 29, SpringLayout.WEST, frmOcr.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, lblLearningRate, 18, SpringLayout.SOUTH, lblLearningSection);
-		frame.getContentPane().add(lblLearningRate);
+		frmOcr.getContentPane().add(lblLearningRate);
 		
 		JLabel lblNumberOfHidden = new JLabel("number of hidden nodes:");
 		springLayout.putConstraint(SpringLayout.NORTH, lblNumberOfHidden, 20, SpringLayout.SOUTH, lblLearningRate);
 		springLayout.putConstraint(SpringLayout.WEST, lblNumberOfHidden, 0, SpringLayout.WEST, lblLearningRate);
-		frame.getContentPane().add(lblNumberOfHidden);
+		frmOcr.getContentPane().add(lblNumberOfHidden);
 		
 		textField = new JTextField();
 		springLayout.putConstraint(SpringLayout.NORTH, textField, -2, SpringLayout.NORTH, lblNumberOfHidden);
 		springLayout.putConstraint(SpringLayout.EAST, textField, 0, SpringLayout.EAST, txtLearningRate);
 		textField.setEditable(false);
-		frame.getContentPane().add(textField);
+		frmOcr.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		chckbxCrossValidation = new JCheckBox("cross validation");
 		springLayout.putConstraint(SpringLayout.WEST, chckbxCrossValidation, 0, SpringLayout.WEST, lblLearningRate);
-		frame.getContentPane().add(chckbxCrossValidation);
+		frmOcr.getContentPane().add(chckbxCrossValidation);
 		
 		JLabel lblTestSection = new JLabel("Test Section");
 		springLayout.putConstraint(SpringLayout.NORTH, btnTesting, 6, SpringLayout.SOUTH, lblTestSection);
 		springLayout.putConstraint(SpringLayout.NORTH, lblTestSection, 11, SpringLayout.SOUTH, separator_3);
-		springLayout.putConstraint(SpringLayout.WEST, lblTestSection, 10, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(lblTestSection);
+		springLayout.putConstraint(SpringLayout.WEST, lblTestSection, 10, SpringLayout.WEST, frmOcr.getContentPane());
+		frmOcr.getContentPane().add(lblTestSection);
 		
 		JButton btnClassifyJpegImage = new JButton("Classify Jpeg Image");
 		springLayout.putConstraint(SpringLayout.EAST, btnTesting, -12, SpringLayout.WEST, btnClassifyJpegImage);
 		springLayout.putConstraint(SpringLayout.NORTH, btnClassifyJpegImage, 0, SpringLayout.NORTH, btnTesting);
 		springLayout.putConstraint(SpringLayout.EAST, btnClassifyJpegImage, 0, SpringLayout.EAST, separator);
-		frame.getContentPane().add(btnClassifyJpegImage);
+		frmOcr.getContentPane().add(btnClassifyJpegImage);
 		
 		lblErrorTrain = new JLabel("Error:");
 		springLayout.putConstraint(SpringLayout.NORTH, lblErrorTrain, 5, SpringLayout.NORTH, btnTrain);
 		springLayout.putConstraint(SpringLayout.WEST, lblErrorTrain, 34, SpringLayout.EAST, separator_1);
-		frame.getContentPane().add(lblErrorTrain);
+		frmOcr.getContentPane().add(lblErrorTrain);
 		
 		spinner = new JSpinner();
 		springLayout.putConstraint(SpringLayout.NORTH, spinner, 11, SpringLayout.SOUTH, textField);
 		springLayout.putConstraint(SpringLayout.EAST, spinner, 0, SpringLayout.EAST, txtLearningRate);
 		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
-		frame.getContentPane().add(spinner);
+		frmOcr.getContentPane().add(spinner);
 		
-		JLabel lblMaxNumberOf = new JLabel("max number of iteration:");
+		JLabel lblMaxNumberOf = new JLabel("number of iteration:");
 		springLayout.putConstraint(SpringLayout.WEST, spinner, 54, SpringLayout.EAST, lblMaxNumberOf);
 		springLayout.putConstraint(SpringLayout.NORTH, chckbxCrossValidation, 8, SpringLayout.SOUTH, lblMaxNumberOf);
 		springLayout.putConstraint(SpringLayout.NORTH, lblMaxNumberOf, 16, SpringLayout.SOUTH, lblNumberOfHidden);
 		springLayout.putConstraint(SpringLayout.WEST, lblMaxNumberOf, 0, SpringLayout.WEST, lblLearningRate);
-		frame.getContentPane().add(lblMaxNumberOf);
+		frmOcr.getContentPane().add(lblMaxNumberOf);
 		
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmOcr.setJMenuBar(menuBar);
 		
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
