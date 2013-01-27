@@ -155,6 +155,8 @@ public class View {
 						if (net.getOutput() == data[0][i].getLabel())
 							sumTrue++;
 					}
+					System.out.println(data[0][0].toString());
+					System.out.println(data[0][0].getLabel());
 					float error = 1.0f - (float)sumTrue / (float)data[0].length;// calc Error
 					lblErrorTrain.setText("Error: " + error);// show Error
 				}
@@ -243,7 +245,7 @@ public class View {
 					net.passforward();
 					lblOutput.setText("Output: " + net.getOutput());
 					lblLabel.setText("Label: " + data[0][0].getLabel());
-					//frmOcr.getGraphics().drawImage(data[0][0].getImage(), 0, 0, null);
+					System.out.println(data[0][0].toString());
 				}
 			}
 		});
