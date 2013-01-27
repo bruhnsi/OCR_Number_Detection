@@ -1,6 +1,7 @@
 package View;
 
 import java.awt.EventQueue;
+import java.awt.LayoutManager;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
@@ -13,6 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 
 import Data.DataProvider;
 import Data.ImageData;
@@ -25,6 +27,7 @@ import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.JProgressBar;
 
 public class View {
 
@@ -38,6 +41,7 @@ public class View {
 	private JCheckBox chckbxCrossValidation;
 	private JLabel lblErrorTrain;
 	private JSpinner spinner;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -79,61 +83,89 @@ public class View {
 		springLayout.putConstraint(SpringLayout.WEST, btnTrain, 10, SpringLayout.WEST, frmOcr.getContentPane());
 		btnTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				btnTrain.setEnabled(false);
-				txtLearningRate.setEditable(false);
-				spinner.setEnabled(false);
-				chckbxCrossValidation.setEnabled(false);
-				
-				net.setLearningRate(Float.parseFloat(txtLearningRate.getText()));
-				
-				JFileChooser fc = new JFileChooser();
-				int state = fc.showOpenDialog(null);
-				if(state == JFileChooser.APPROVE_OPTION)
-				{
-					String path = fc.getSelectedFile().getAbsolutePath();
-					DataProvider dataProvider = new DataProvider(path);
-					ImageData[][] data = dataProvider.getData(7);
-					int loopCount = (int)spinner.getValue();
-					for(int count = 1; count <= loopCount; count++)
-					{
-						int sumTrue = 0;
-						System.out.println((int) spinner.getValue());
-						if(chckbxCrossValidation.isSelected())
-						{
-							//Crossvalidation
-							//for()
-						}
-						else
-						{
-							// learning on first 6/7 of data
-							for(int i = 0; i < 6; i++)
-							{
-								for(int j = 0; j < data[i].length; j++)
-									net.learn(data[i][j].getGrayValues(), data[i][j].getLabel());
-							}
-							// testing on last 1/7 of data
-							
-							for(int i = 0; i < data[6].length; i++ )
-							{
-								net.setInput(data[6][i]);
-								net.passforward();
-								if (net.getOutput() == data[6][i].getLabel())
-									sumTrue++;
-							}
-						}
-						// calc Error
-						float error = 1.0f - (float)sumTrue / (float)data[6].length;
-						spinner.setValue(loopCount - count);
-						// show Error
-						lblErrorTrain.setText("Error: " + error);
-					}
+				new Thread(new Runnable() {
 					
-				}
-				btnTrain.setEnabled(true);
-				txtLearningRate.setEditable(true);
-				spinner.setEnabled(true);
-				chckbxCrossValidation.setEnabled(true);
+					@Override
+					public void run() {
+
+						SpringLayout springLayout = (SpringLayout)frmOcr.getContentPane().getLayout();
+						progressBar = new JProgressBar(0,700000);
+						progressBar.setStringPainted(true);
+						springLayout.putConstraint(SpringLayout.NORTH, progressBar, -15, SpringLayout.SOUTH, frmOcr.getContentPane());
+						springLayout.putConstraint(SpringLayout.WEST, progressBar, 0, SpringLayout.WEST, frmOcr.getContentPane());
+						springLayout.putConstraint(SpringLayout.SOUTH, progressBar, 0, SpringLayout.SOUTH, frmOcr.getContentPane());
+						springLayout.putConstraint(SpringLayout.EAST, progressBar, 390, SpringLayout.WEST, frmOcr.getContentPane());
+						frmOcr.getContentPane().add(progressBar);
+						btnTrain.setEnabled(false);
+						txtLearningRate.setEditable(false);
+						spinner.setEnabled(false);
+						chckbxCrossValidation.setEnabled(false);
+						
+						net.setLearningRate(Float.parseFloat(txtLearningRate.getText()));
+						
+						JFileChooser fc = new JFileChooser();
+						int state = fc.showOpenDialog(null);
+						if(state == JFileChooser.APPROVE_OPTION)
+						{
+							String path = fc.getSelectedFile().getAbsolutePath();
+							DataProvider dataProvider = new DataProvider(path);
+							ImageData[][] data = dataProvider.getData(7);
+							int loopCount = (int)spinner.getValue();
+							for(int count = 1; count <= loopCount; count++)
+							{
+								int sumTrue = 0;
+								System.out.println((int) spinner.getValue());
+								if(chckbxCrossValidation.isSelected())
+								{
+									//Crossvalidation
+									//for()
+								}
+								else
+								{
+									// learning on first 6/7 of data
+									for(int i = 0; i < 6; i++)
+									{
+										for(int j = 0; j < data[i].length; j++)
+										{
+											net.learn(data[i][j].getGrayValues(), data[i][j].getLabel());
+											final int progressState = (i+1) * data[i].length + j ; 
+											SwingUtilities.invokeLater(new Runnable() {
+												
+												@Override
+												public void run() {
+													progressBar.setValue(progressState);
+												}
+											});
+										}
+										
+									}
+									// testing on last 1/7 of data
+									
+									for(int i = 0; i < data[6].length; i++ )
+									{
+										net.setInput(data[6][i]);
+										net.passforward();
+										if (net.getOutput() == data[6][i].getLabel())
+											sumTrue++;
+										progressBar.setValue(progressBar.getValue()+1);
+									}
+								}
+								// calc Error
+								float error = 1.0f - (float)sumTrue / (float)data[6].length;
+								spinner.setValue(loopCount - count);
+								// show Error
+								lblErrorTrain.setText("Error: " + error);
+							//	progressBar.setValue(0);
+							}
+							
+						}
+						btnTrain.setEnabled(true);
+						txtLearningRate.setEditable(true);
+						spinner.setEnabled(true);
+						chckbxCrossValidation.setEnabled(true);
+						
+					}
+				}).start();
 				
 			}
 		});
@@ -226,6 +258,8 @@ public class View {
 		springLayout.putConstraint(SpringLayout.WEST, lblMaxNumberOf, 0, SpringLayout.WEST, lblLearningRate);
 		frmOcr.getContentPane().add(lblMaxNumberOf);
 		
+		
+		
 		JMenuBar menuBar = new JMenuBar();
 		frmOcr.setJMenuBar(menuBar);
 		
@@ -278,6 +312,8 @@ public class View {
 		});
 		mnDatei.add(mntmSaveNetwork);
 	}
+	
+
 	
 	public void updated()
 	{
