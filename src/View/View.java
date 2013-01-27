@@ -24,7 +24,7 @@ import javax.swing.JSeparator;
 import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JProgressBar;
+
 
 public class View {
 
@@ -40,7 +40,6 @@ public class View {
 	private JLabel lblOutput;
 	private JLabel lblLabel;
 	private JSpinner spinner;
-	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -87,14 +86,6 @@ public class View {
 					@Override
 					public void run() {
 
-						SpringLayout springLayout = (SpringLayout)frmOcr.getContentPane().getLayout();
-						progressBar = new JProgressBar(0,700000);
-						progressBar.setStringPainted(true);
-						springLayout.putConstraint(SpringLayout.NORTH, progressBar, -15, SpringLayout.SOUTH, frmOcr.getContentPane());
-						springLayout.putConstraint(SpringLayout.WEST, progressBar, 0, SpringLayout.WEST, frmOcr.getContentPane());
-						springLayout.putConstraint(SpringLayout.SOUTH, progressBar, 0, SpringLayout.SOUTH, frmOcr.getContentPane());
-						springLayout.putConstraint(SpringLayout.EAST, progressBar, 390, SpringLayout.WEST, frmOcr.getContentPane());
-						frmOcr.getContentPane().add(progressBar);
 						btnTrain.setEnabled(false);
 						txtLearningRate.setEditable(false);
 						spinner.setEnabled(false);
@@ -127,14 +118,7 @@ public class View {
 										for(int j = 0; j < data[i].length; j++)
 										{
 											net.learn(data[i][j].getGrayValues(), data[i][j].getLabel());
-											final int progressState = (i+1) * data[i].length + j ; 
-											SwingUtilities.invokeLater(new Runnable() {
-												
-												@Override
-												public void run() {
-													progressBar.setValue(progressState);
-												}
-											});
+								
 										}
 										
 									}
@@ -146,7 +130,6 @@ public class View {
 										net.passforward();
 										if (net.getOutput() == data[6][i].getLabel())
 											sumTrue++;
-										progressBar.setValue(progressBar.getValue()+1);
 									}
 								}
 								// calc Error
