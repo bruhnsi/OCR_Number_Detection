@@ -39,8 +39,14 @@ public class ImageData {
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.label+ "\n\n");
-		for(float grayValue :this.grayValues)
-			sb.append(grayValue+ " ");
+		//for(float grayValue :this.grayValues)
+			//sb.append(grayValue+ " ");
+		for (int i = 0; i < grayValues.length; i++) {
+			if (i % 28 == 0)
+				sb.append("\n");
+			sb.append(grayValues[i]+ " ");
+			
+		}
 		return sb.toString();
 	}
 	
