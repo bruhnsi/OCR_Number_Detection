@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import Data.DataProvider;
 import Data.ImageData;
 import NeuralNetwork.Network;
+import NeuralNetwork.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -106,9 +107,7 @@ public class View {
 							float error = 0;
 							for(int count = 1; count <= loopCount; count++)
 							{
-								int sumTrue = 0;
-								
-								
+								int sumTrue = 0;		
 								if(chckbxCrossValidation.isSelected())
 								{
 									// Cossvalidation
@@ -200,10 +199,45 @@ public class View {
 					ImageData[][] data = dataProvider.getData(1);
 					int sumTrue=0;
 					for(int i = 0; i < data[0].length; i++ ){
-						net.setInput(data[0][i]);
-						net.passforward();
-						if (net.getOutput() == data[0][i].getLabel())
-							sumTrue++;
+						if (chckbxCrossValidation.isSelected() && nets != null)
+						{
+							// berechne alle Netzwerke
+							float[][] outputs = new float[nets.length][10]; 
+							for (int j = 0; j < nets.length; j++)
+							{
+								nets[j].setInput(data[0][i]);
+								nets[j].passforward();
+								outputs[j] = nets[j].getOutArray();
+							}
+							// Mittel Output
+							float[] midOut = new float[10];
+							for(int j =0; j < 10; j++)
+							{
+								float sum = 0;
+								for(int netNumber = 0; netNumber < nets.length; netNumber++)
+								{
+									sum += outputs[netNumber][j];
+								}
+								midOut[j] = sum / 10.0f;
+							}
+							// midOut Array -> int;
+							int outputint = 0;
+							for (int j = 0; j < midOut.length; j++)
+							{
+								if(midOut[j]> midOut[outputint])
+									outputint = j;
+							}
+							// test
+							if (outputint == data[0][i].getLabel())
+								sumTrue++;
+						}
+						else
+						{
+							net.setInput(data[0][i]);
+							net.passforward();
+							if (net.getOutput() == data[0][i].getLabel())
+								sumTrue++;
+						}
 					}
 					System.out.println(data[0][0].toString());
 					System.out.println(data[0][0].getLabel());

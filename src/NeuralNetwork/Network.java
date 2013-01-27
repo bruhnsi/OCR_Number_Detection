@@ -42,6 +42,14 @@ public class Network implements Runnable, Savable {
 		loadFromFile(path);
 	}
 
+	public float[] getOutArray()
+	{
+		float[] a = new float[10];
+		Node[] nodes = layers[2].getNodes();
+		for (int i = 0; i < nodes.length; i++)
+			a[i] = nodes[i].getValue();
+		return a;
+	}
 	public float getLearningRate() {
 		return learningRate;
 	}
