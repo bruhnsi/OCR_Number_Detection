@@ -19,14 +19,25 @@ public class NewNetworkView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldLearningRate;
+	public JTextField getTextFieldLearningRate() {
+		return textFieldLearningRate;
+	}
+
+	public void setTextFieldLearningRate(JTextField textFieldLearningRate) {
+		this.textFieldLearningRate = textFieldLearningRate;
+	}
+
+	public JTextField getTextFieldNumberNode() {
+		return textFieldNumberNode;
+	}
+
+	public void setTextFieldNumberNode(JTextField textFieldNumberNode) {
+		this.textFieldNumberNode = textFieldNumberNode;
+	}
 	private JTextField textFieldNumberNode;
-	private Network net;
 	private JButton btnCreate;
 
 
-	public Network getNet() {
-		return net;
-	}
 
 	public void addCreatListener(ActionListener a){
 		btnCreate.addActionListener(a);

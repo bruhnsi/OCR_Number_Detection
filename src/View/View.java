@@ -151,8 +151,9 @@ public class View {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				net = addView.getNet();
+				net = new Network(Float.parseFloat(addView.getTextFieldLearningRate().getText()),Integer.parseInt(addView.getTextFieldNumberNode().getText()));
 				txtLearningRate.setText(Float.toString(net.getLearningRate()));
+				textField.setText(Integer.toString(net.getNumberHiddenNodes()));
 				addView.setVisible(false);
 			}
 		});
