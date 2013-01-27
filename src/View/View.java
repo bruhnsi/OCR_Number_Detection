@@ -43,6 +43,7 @@ public class View {
 	private JLabel lblLabel;
 	private JSpinner spinner;
 	private Network nets[];
+	private JLabel lblErrorTest;
 
 	/**
 	 * Launch the application.
@@ -242,7 +243,7 @@ public class View {
 					System.out.println(data[0][0].toString());
 					System.out.println(data[0][0].getLabel());
 					float error = 1.0f - (float)sumTrue / (float)data[0].length;// calc Error
-					lblErrorTrain.setText("Error: " + error);// show Error
+					lblErrorTest.setText("Error: " + error);// show Error
 				}
 			}
 		});
@@ -355,6 +356,11 @@ public class View {
 		springLayout.putConstraint(SpringLayout.NORTH, lblMaxNumberOf, 16, SpringLayout.SOUTH, lblNumberOfHidden);
 		springLayout.putConstraint(SpringLayout.WEST, lblMaxNumberOf, 0, SpringLayout.WEST, lblLearningRate);
 		frmOcr.getContentPane().add(lblMaxNumberOf);
+		
+		lblErrorTest = new JLabel("Error:");
+		springLayout.putConstraint(SpringLayout.NORTH, lblErrorTest, 6, SpringLayout.SOUTH, btnTesting);
+		springLayout.putConstraint(SpringLayout.WEST, lblErrorTest, 0, SpringLayout.WEST, btnTrain);
+		frmOcr.getContentPane().add(lblErrorTest);
 		
 		
 		
