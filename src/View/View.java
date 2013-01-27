@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
@@ -153,10 +154,7 @@ public class View {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				net = new Network(Float.parseFloat(addView.getTextFieldLearningRate().getText()),Integer.parseInt(addView.getTextFieldNumberNode().getText()));
-				txtLearningRate.setText(Float.toString(net.getLearningRate()));
-				textField.setText(Integer.toString(net.getNumberHiddenNodes()));
-				txtLearningRate.setEditable(true);
-				btnTrain.setEnabled(true);
+				updated();
 				addView.setVisible(false);
 			}
 		});
@@ -170,9 +168,41 @@ public class View {
 		mnDatei.add(mntmNewNetwork);
 		
 		JMenuItem mntmLoadNetwork = new JMenuItem("Load Network");
+		mntmLoadNetwork.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int state = fc.showOpenDialog(null);
+				if(state == JFileChooser.APPROVE_OPTION)
+				{
+					net = new Network(fc.getSelectedFile().getAbsolutePath());
+					updated();
+				}
+			}
+		});
 		mnDatei.add(mntmLoadNetwork);
 		
 		JMenuItem mntmSaveNetwork = new JMenuItem("Save Network");
+		mntmSaveNetwork.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				int state = fc.showSaveDialog(null);
+				if(state == JFileChooser.APPROVE_OPTION)
+				{
+					net.saveToFile(fc.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
 		mnDatei.add(mntmSaveNetwork);
+	}
+	
+	public void updated()
+	{
+		if (this.net != null)
+		{
+			txtLearningRate.setText(Float.toString(net.getLearningRate()));
+			textField.setText(Integer.toString(net.getNumberHiddenNodes()));
+			txtLearningRate.setEditable(true);
+			btnTrain.setEnabled(true);
+		}
 	}
 }
